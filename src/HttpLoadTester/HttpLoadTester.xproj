@@ -14,6 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/d7e08ef0-a0a4-44d0-a520-f5bdf4b18c48/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/HttpLoadTester</ApplicationInsightsResourceId>
   </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="bower.json" />

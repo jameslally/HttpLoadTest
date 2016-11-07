@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using HttpLoadTester.SignalR;
 
 namespace HttpLoadTester
 {
@@ -37,6 +38,16 @@ namespace HttpLoadTester
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
+
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+            });
+
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<ServiceActions>();
+
+            services.AddTransient<ServiceRunner>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +78,10 @@ namespace HttpLoadTester
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseWebSockets();
+            app.UseSignalR<RawConnection>("/raw-connection");
+            app.UseSignalR();
         }
     }
 }
