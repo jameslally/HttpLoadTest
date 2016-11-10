@@ -14,8 +14,12 @@ namespace HttpLoadTester.Entites.Test
     }
     public class TestResult
     {
+        public TestResult()
+        {
+            Id = Guid.NewGuid();
+        }
         public ResultStatusType Status { get; set; }
-        public int Id { get; set; }
+        public Guid Id { get; }
         public DateTime? StartDate { get; set; }
         public long? Duration { get; set; }
     }

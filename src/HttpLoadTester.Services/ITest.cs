@@ -5,6 +5,7 @@ namespace HttpLoadTester.Services
 {
     public interface ITest
     {
+        bool ResponsibleFor(string name);
         Task Run(TestResult result);
     }
 }

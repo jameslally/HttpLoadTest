@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using HttpLoadTester.DTOs;
+using HttpLoadTester.Entites.Test;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace HttpLoadTester.SignalR
@@ -12,12 +17,14 @@ namespace HttpLoadTester.SignalR
         private readonly IHubContext _hubContext;
         private readonly ServiceActions _statusService;
         private readonly string _sourceUrl;
+        
 
         public ServiceRunner(IConnectionManager connectionManager, IConfiguration configuration, ServiceActions statusService)
         {
             _hubContext = connectionManager.GetHubContext<DashboardHub>();
             _statusService = statusService;
             _sourceUrl = configuration["HttpSourceLocation"];
+            
         }
 
         public bool Active { get; set; }
@@ -25,47 +32,43 @@ namespace HttpLoadTester.SignalR
         public void DoWork()
         {
             Active = true;
-
+            _statusService.StartService("dummy");
             while (Active)
             {
                 var json = GetStatusJson();
+                _hubContext.Clients.All.displayFromHub(json).Wait();
 
-                //if (!StatusUpdatePerformed(json))
-                //{
-                    _hubContext.Clients.All.displayFromHub(json).Wait();
-                //}
-
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
             }
         }
 
-        private bool StatusUpdatePerformed(string json)
-        {
-            //dynamic stuff = JsonConvert.DeserializeObject(json);
-            //foreach (var org in stuff)
-            //{
-            //    string code = org.Code;
-            //    int batch = org.PatientCount;
-            //    int processed = org.Processed;
-            //    int unprocessed = org.Unprocessed;
-            //    string state = org.State;
-
-            //    if (!string.IsNullOrWhiteSpace(state) && state.StartsWith("running", StringComparison.OrdinalIgnoreCase)
-            //        && batch == processed && batch > 0 && unprocessed == 0)
-            //    {
-            //        _statusService.UpdateStatus(code, "AwaitingPostProcess");
-            //        return true;
-            //    }
-            //}
-
-            //return false;
-
-            return true;
-        }
+   
 
         private string GetStatusJson()
         {
-            return "{test:bcd}";// JsonConvert.SerializeObject(_statusService.Status());
+            foreach (var result in _statusService.Results.Values)
+            {
+                var results = new TestReport();
+                var rows = new List<TestReportRow>();
+                foreach (var group in result.GroupBy(g => g.Status))
+                {
+                    var count = group.Count();
+                    var avg = group.Average(g => g.Duration) ?? 0;
+                    Console.WriteLine($"{group.Key} - {count} items averaging {avg}ms per test");
+                    rows.Add(new TestReportRow() { AverageDuration = (int)avg, Count = count, Status = group.Key.ToString() });
+                }
+                results.Rows = rows;
+
+                return JsonConvert.SerializeObject(results);
+            }
+            return "";
+            //var results = new TestReport();
+            //var rows = new List<TestReportRow>();
+            //rows.Add(new TestReportRow() { AverageDuration = 12, Count = 55, Status = "Successful" });
+            //rows.Add(new TestReportRow() { AverageDuration = 33, Count = 8, Status = "Failed" });
+            //rows.Add(new TestReportRow() { AverageDuration = 0, Count = 3, Status = "InProgress" });
+            //results.Rows = rows;
+            //return JsonConvert.SerializeObject(results);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace TestRunner
         public static void Main(string[] args)
         {
 
-            var r = new HttpLoadTester.Services.Scenarios.PFMUserTest();
+            //var r = new HttpLoadTester.Services.Scenarios.PFMUserTest();
+            var r = new HttpLoadTester.Services.Scenarios.DummyTest();
             var runner = new ScenariosRunner(r, 10, 500);
 
             var results = new ConcurrentBag<TestResult>();

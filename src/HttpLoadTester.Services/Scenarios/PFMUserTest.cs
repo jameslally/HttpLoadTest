@@ -13,6 +13,11 @@ namespace HttpLoadTester.Services.Scenarios
 
     public class PFMUserTest : ITest
     {
+        public bool ResponsibleFor(string name)
+        {
+            return "PFMUser".Equals(name, StringComparison.OrdinalIgnoreCase);
+        }
+
         private readonly string[] pages = new[] {
                                 "http://192.168.1.12:816/Config/UserConfig.aspx"
                                ,"http://192.168.1.12:816/api/UserConfig"

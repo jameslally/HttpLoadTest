@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using HttpLoadTester.SignalR;
+using HttpLoadTester.Services;
+using HttpLoadTester.Services.Scenarios;
 
 namespace HttpLoadTester
 {
@@ -46,6 +48,9 @@ namespace HttpLoadTester
 
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<ServiceActions>();
+
+            services.AddTransient<ITest, DummyTest>();
+            services.AddTransient<ITest, PFMUserTest>();
 
             services.AddTransient<ServiceRunner>();
         }

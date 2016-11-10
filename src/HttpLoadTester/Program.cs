@@ -24,6 +24,7 @@ namespace HttpLoadTester
             var s = host.Services.GetService(typeof(ServiceRunner)) as ServiceRunner;
             _task = Task.Run(() => s.DoWork());
 
+            
             host.Run();
         }
     }
