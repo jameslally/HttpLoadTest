@@ -18,6 +18,7 @@ var paths = {
         webroot + 'js/json2.js',
         webroot + 'js/jquery.cookie.js',
         webroot + 'js/signalr.samples.js',
+        webroot + 'js/DashboardCanvasJS.js',
         webroot + 'js/Dashboard.js'
     ],
     jsRoot: webroot + 'js',

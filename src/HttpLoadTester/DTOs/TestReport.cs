@@ -7,6 +7,7 @@ namespace HttpLoadTester.DTOs
 {
     public class TestReport
     {
+        public int ProcessedInLastMinute { get; set; }
         public IEnumerable<TestReportRow> Rows { get; set; }
     }
 }

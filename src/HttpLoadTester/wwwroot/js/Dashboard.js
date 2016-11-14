@@ -48,7 +48,14 @@ $(function () {
                     SetDataOnRow(li, data);
                 }
             }
+
+            var last = json.ProcessedInLastMinute;
+            //if (last < 20)
+              //  last = 20;
+            //tick(last);
+            queue.push(last);
         }
+        //tick();
     };
        
     $.connection.hub.stateChanged(function (change) {
