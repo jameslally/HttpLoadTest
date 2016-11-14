@@ -39,7 +39,7 @@ namespace HttpLoadTester.SignalR
                 var json = GetStatusJson();
                 _hubContext.Clients.All.displayFromHub(json).Wait();
 
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
             }
         }
 

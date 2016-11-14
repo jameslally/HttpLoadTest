@@ -50,10 +50,7 @@ $(function () {
             }
 
             var last = json.ProcessedInLastMinute;
-            //if (last < 20)
-              //  last = 20;
-            //tick(last);
-            queue.push(last);
+            charty.updateChart(last)
         }
         //tick();
     };

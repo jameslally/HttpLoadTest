@@ -10896,50 +10896,57 @@ function getQueryVariable(variable) {
 
 var activeTransport = getQueryVariable('transport') || 'auto';
 var isJsonp = getQueryVariable('jsonp') === 'true';
+var nextXPoint = 0;
+
+var charty = {};
+
+
 window.onload = function () {
 
-    var dps = []; // dataPoints
+    charty.dps = []; // dataPoints
 
-    var chart = new CanvasJS.Chart("chartContainer", {
+    charty.chart = new CanvasJS.Chart("chartContainer", {
         title: {
-            text: "Live Random Data"
+            text: "Request Per Second"
+        },
+        axisX:{
+        title:"Request Sequence",
+        },
+        axisY: {
+            title: "Requests",
         },
         data: [{
             type: "line",
-            dataPoints: dps
+            dataPoints: charty.dps
         }]
     });
 
-    var xVal = 0;
-    var yVal = 100;
-    var updateInterval = 100;
-    var dataLength = 500; // number of dataPoints visible at any point
+    charty.xVal = 0;
+    charty.yVal = 100;
+    charty.updateInterval = 100;
+    charty.dataLength = 500; // number of dataPoints visible at any point
 
-    var updateChart = function (count) {
-        count = count || 1;
-        // count is number of times loop runs to generate random dataPoints.
+    charty.updateChart = function (yVal) {
 
-        for (var j = 0; j < count; j++) {
-            yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
-            dps.push({
-                x: xVal,
-                y: yVal
-            });
-            xVal++;
-        };
-        if (dps.length > dataLength) {
-            dps.shift();
+        charty.dps.push({
+            x: charty.xVal,
+            y: yVal
+        });
+        charty.xVal++;
+
+        if (charty.dps.length > charty.dataLength) {
+            charty.dps.shift();
         }
 
-        chart.render();
+        charty.chart.render();
 
     };
 
     // generates first set of dataPoints
-    updateChart(dataLength);
+    //updateChart(dataLength);
 
     // update chart after specified time. 
-    setInterval(function () { updateChart() }, updateInterval);
+    //setInterval(function () { updateChart() }, updateInterval);
 
 }
 /// <reference path="../../Scripts/jquery-1.8.2.js" />
@@ -10994,10 +11001,7 @@ $(function () {
             }
 
             var last = json.ProcessedInLastMinute;
-            //if (last < 20)
-              //  last = 20;
-            //tick(last);
-            queue.push(last);
+            charty.updateChart(last)
         }
         //tick();
     };
