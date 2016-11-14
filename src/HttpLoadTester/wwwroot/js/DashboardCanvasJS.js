@@ -1,53 +1,36 @@
-﻿var nextXPoint = 0;
+﻿
+function createCharty(containerSelector , title , xAxis , yAxis) {
 
-var charty = {};
-
-
-window.onload = function () {
-
-    charty.dps = []; // dataPoints
-
-    charty.chart = new CanvasJS.Chart("chartContainer", {
-        title: {
-            text: "Request Per Second"
-        },
-        axisX:{
-        title:"Request Sequence",
-        },
-        axisY: {
-            title: "Requests",
-        },
+    var charty = {};
+    charty.dataPoints = []; // dataPoints
+    //createCharty("chartContainer","Request Per Second","Request Sequence","Requests");
+    charty.chart = new CanvasJS.Chart(containerSelector, {
+        title: {text: title},
+        axisX:{title: xAxis,},
+        axisY: {title: yAxis,},
         data: [{
             type: "line",
-            dataPoints: charty.dps
+            dataPoints: charty.dataPoints
         }]
     });
 
     charty.xVal = 0;
-    charty.yVal = 100;
-    charty.updateInterval = 100;
     charty.dataLength = 500; // number of dataPoints visible at any point
 
     charty.updateChart = function (yVal) {
 
-        charty.dps.push({
+        charty.dataPoints.push({
             x: charty.xVal,
             y: yVal
         });
         charty.xVal++;
 
-        if (charty.dps.length > charty.dataLength) {
-            charty.dps.shift();
+        if (charty.dataPoints.length > charty.dataLength) {
+            charty.dataPoints.shift();
         }
 
         charty.chart.render();
-
     };
 
-    // generates first set of dataPoints
-    //updateChart(dataLength);
-
-    // update chart after specified time. 
-    //setInterval(function () { updateChart() }, updateInterval);
-
+    return charty;
 }

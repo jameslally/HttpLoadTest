@@ -9,6 +9,8 @@ $(function () {
         templateSource = $("#some-template").html(),
         template = Handlebars.compile(templateSource);
 
+    var charty = createCharty("chartContainer", "Request Per Second", "Request Sequence", "Requests");
+
     $.connection.hub.logging = true;
 
     HandlebarsIntl.registerWith(Handlebars);
