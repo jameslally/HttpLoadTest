@@ -36,10 +36,8 @@ namespace HttpLoadTester.Services.Scenarios
                                "http://192.168.1.12:816/api/SummaryCount"
                                ,"http://192.168.1.12:816/api/MOTD"
                                ,"http://192.168.1.12:816/api/Grid"
-                               //,"http://192.168.1.12:816/api/GridColumn"
+                               ,"http://192.168.1.12:816/api/GridColumn?gridCategory=INPATIENT"
                                ,"http://192.168.1.12:816/api/Ping" };
-
-
         
         public async Task Run(TestResult result)
         {
