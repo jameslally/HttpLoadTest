@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "asp.net",
+  "name": "httploadtester",
   "private": true,
   "devDependencies": {
     "gulp": "~3.9.1",
@@ -14,5 +14,13 @@
     "gulp-sourcemaps": "1.6.0",
     "gulp-rename": "1.2.2",
     "handlebars-intl": "1.1.2"
-  }
+  },
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

@@ -10932,7 +10932,7 @@ function createCharty(containerSelector , title , xAxis , yAxis) {
 
     return charty;
 }
-/// <reference path="../../Scripts/jquery-1.8.2.js" />
+
 $(function () {
     "use strict";
     var dashHub = $.connection.dashboardHub,
@@ -10967,11 +10967,11 @@ $(function () {
 
     $("#usrBtnStartView").click(function () {
         $(this).find('i').collapse('show');
-        dashHub.server.sendStartToHub('PFMViewingDashboard');
+        dashHub.server.sendStartToHub('Dummy');
     });
     $("#usrBtnStopView").click(function () {
         $(this).find('i').collapse('show');
-        dashHub.server.sendStopToHub('PFMViewingDashboard');
+        dashHub.server.sendStopToHub('Dummy');
     });
 
     dashHub.client.displayFromHub = function (value) {
