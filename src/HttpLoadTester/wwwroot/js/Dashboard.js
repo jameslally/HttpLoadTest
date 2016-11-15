@@ -33,11 +33,11 @@ $(function () {
 
     $("#usrBtnStartView").click(function () {
         $(this).find('i').collapse('show');
-        dashHub.server.sendStartToHub('Dummy');
+        dashHub.server.sendStartToHub('PFMViewingDashboard');
     });
     $("#usrBtnStopView").click(function () {
         $(this).find('i').collapse('show');
-        dashHub.server.sendStopToHub('Dummy');
+        dashHub.server.sendStopToHub('PFMViewingDashboard');
     });
 
     dashHub.client.displayFromHub = function (value) {
