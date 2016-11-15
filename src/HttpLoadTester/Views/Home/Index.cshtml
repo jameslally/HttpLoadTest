@@ -6,13 +6,10 @@
 
 
         <div class="container">
-
             <div class="row">
                 <div class="btn-group btn-group-lg" role="group" aria-label="Simulates PFM user views">
                     <button id="usrBtnStartView" type="button" class="btn btn-default">Start</button>
                     <button id="usrBtnStopView" type="button" class="btn btn-default">Stop</button>
-                    @*<button type="button" class="btn btn-default">Middle</button>
-                        <button type="button" class="btn btn-default">Right</button>*@
                 </div>
             </div>
             <div class="row">
@@ -29,14 +26,7 @@
                             <tbody></tbody>
                         </table>
 
-                        <script id="some-template" type="text/x-handlebars-template">
-                            <tr id="org-{{Status}}">
-
-                                <td>{{Status}}</td>
-                                <td>{{Count}}</td>
-                                <td>{{AverageDuration}}</td>
-                            </tr>
-                        </script>
+                       
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -49,13 +39,12 @@
     </div>
 </div>
 
-<ul id="messages"></ul>
 
-<style>
-    .line {
-        fill: none;
-        stroke: #000;
-        stroke-width: 1.5px;
-    }
-</style>
-<svg width="960" height="500"></svg>
+<script id="some-template" type="text/x-handlebars-template">
+    <tr id="org-{{Status}}">
+
+        <td>{{Status}}</td>
+        <td>{{Count}}</td>
+        <td>{{AverageDuration}}</td>
+    </tr>
+</script>
