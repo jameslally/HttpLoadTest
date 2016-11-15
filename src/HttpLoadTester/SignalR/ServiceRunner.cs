@@ -33,7 +33,7 @@ namespace HttpLoadTester.SignalR
         public void DoWork()
         {
             Active = true;
-            _statusService.StartService("Dummy");//("PFMUser");//
+
             while (Active)
             {
                 var json = GetStatusJson();

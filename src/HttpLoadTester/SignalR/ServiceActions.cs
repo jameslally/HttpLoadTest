@@ -33,12 +33,22 @@ namespace HttpLoadTester.SignalR
                     runner.ExecuteTestRun(this.Results[testName]);
                     _runner.Add(testName, runner);
                 }
-                    
-                // 
+                else
+                {
+                    var runner = _runner[testName];
+                    if (!runner.Active)
+                        runner.ExecuteTestRun(this.Results[testName]);
+                }                   
             }
         }
 
-        
+        public void StopService(string testName)
+        {
+            if (_runner.ContainsKey(testName))
+            {
+                _runner[testName].Active = false;
+            }
+        }
 
         public void Status()
         {

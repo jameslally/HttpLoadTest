@@ -27,10 +27,15 @@ namespace HttpLoadTester.SignalR
             return connectionId + " removed from " + groupName;
         }
 
-        public string sendStatusToHub(string code, string state)
+        public string sendStartToHub(string code)
         {
-            //_statusService.UpdateStatus(code, state);
+            _statusService.StartService(code);//("PFMUser");//
+            return "";
+        }
 
+        public string sendStopToHub(string code)
+        {
+            _statusService.StopService(code);
             return "";
         }
 

@@ -21,6 +21,25 @@ $(function () {
         li.data('count', data.Count);
     }
 
+    //function addButtonAction(selector,action,code)
+    //{
+    //    var b = li.find("#btnStart" + data.Code);
+
+    //    b.click(function () {
+    //        $(this).find('i').collapse('show');
+    //        dashHub.server.sendStatusToHub($(this).data('code'), 'run').done(function (value) { });
+    //    });
+    //}
+
+    $("#usrBtnStartView").click(function () {
+        $(this).find('i').collapse('show');
+        dashHub.server.sendStartToHub('Dummy');
+    });
+    $("#usrBtnStopView").click(function () {
+        $(this).find('i').collapse('show');
+        dashHub.server.sendStopToHub('Dummy');
+    });
+
     dashHub.client.displayFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
