@@ -13,7 +13,8 @@
     "gulp-rimraf": "0.2.0",
     "gulp-sourcemaps": "1.6.0",
     "gulp-rename": "1.2.2",
-    "handlebars-intl": "1.1.2"
+    "handlebars-intl": "1.1.2",
+    "gulp-bower": "0.0.13"
   },
   "main": "gulpfile.js",
   "dependencies": {},

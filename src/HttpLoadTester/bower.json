@@ -8,6 +8,7 @@
     "handlebars": "^4.0.5",
     "handlebars-helpers": "^2.0.0",
     "signalr": "^2.2.1",
-    "handlebars-helper-intl": "1.1.2"
+    "handlebars-helper-intl": "1.1.2",
+    "chart.js": "latest"
   }
 }

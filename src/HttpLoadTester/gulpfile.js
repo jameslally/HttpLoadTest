@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     merge = require('merge-stream'),
     project = require('./project.json'),
     rename = require('gulp-rename'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+    bower = require('gulp-bower');
 
 var webroot = './' + project.webroot + '/';
 
@@ -31,7 +32,8 @@ var paths = {
         webroot + 'lib/signalr/jquery.signalR.js',
         webroot + 'lib/handlebars/handlebars.js',
         webroot + 'lib/handlebars-helpers/src/helpers.js',
-        webroot + 'lib/handlebars-helper-intl/dist/handlebars-intl.js'
+        webroot + 'lib/handlebars-helper-intl/dist/handlebars-intl.js',
+        webroot + 'lib/chart.js/dist/Chart.js',
     ],
     jsLibNoBundle:
     [
@@ -40,7 +42,8 @@ var paths = {
     ],
     css: webroot + 'css/*.css',
     cssBuild: webroot + 'css/site.css',
-    cssBuildMin: webroot + 'css/site.min.css'
+    cssBuildMin: webroot + 'css/site.min.css',
+    bower:webroot + 'lib'
 };
 
 gulp.task('clean:js', function () {
@@ -93,7 +96,10 @@ gulp.task('watch', [], function () {
 
 gulp.task('min', ['min:js', 'min:styles'], function () { });
 
-gulp.task('onbuild', ['min', 'copy:js'], function () { });
+gulp.task('onbuild', ['bower' , 'min', 'copy:js'], function () { });
 
 gulp.task('default', ['onbuild', 'watch'], function () { });
 
+gulp.task('bower', function() {
+    return bower()
+        .pipe(gulp.dest(paths.bower))});
