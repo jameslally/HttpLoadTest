@@ -47,12 +47,15 @@ namespace HttpLoadTester.SignalR
 
         private string GetStatusJson()
         {
-            foreach (var result in _statusService.Results.Values)
+            var resultsList = new List<TestReport>();
+            foreach (var key in _statusService.Results.Keys)
             {
                 int totalCount = 0;
                 var results = new TestReport();
+                results.Name = key;
+
                 var rows = new List<TestReportRow>();
-                foreach (var group in result.GroupBy(g => g.Status))
+                foreach (var group in _statusService.Results[key].GroupBy(g => g.Status))
                 {
                     var count = group.Count();
                     var avg = group.Average(g => g.Duration) ?? 0;
@@ -63,20 +66,13 @@ namespace HttpLoadTester.SignalR
                         totalCount += count;
                 }
                 results.Rows = rows;
-                
                 results.ProcessedInLastMinute = totalCount - _totalCount;
                 _totalCount = totalCount;
 
-                return JsonConvert.SerializeObject(results);
+                resultsList.Add(results);
             }
-            return "";
-            //var results = new TestReport();
-            //var rows = new List<TestReportRow>();
-            //rows.Add(new TestReportRow() { AverageDuration = 12, Count = 55, Status = "Successful" });
-            //rows.Add(new TestReportRow() { AverageDuration = 33, Count = 8, Status = "Failed" });
-            //rows.Add(new TestReportRow() { AverageDuration = 0, Count = 3, Status = "InProgress" });
-            //results.Rows = rows;
-            //return JsonConvert.SerializeObject(results);
+
+            return JsonConvert.SerializeObject(resultsList);
         }
     }
 }

@@ -10,13 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HttpLoadTester", "src\HttpLoadTester\HttpLoadTester.xproj", "{7529DF40-4977-4647-8356-2BD4513ADF13}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HttpLoadTester", "HttpLoadTester\HttpLoadTester.xproj", "{7529DF40-4977-4647-8356-2BD4513ADF13}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HttpLoadTester.Services", "src\HttpLoadTester.Services\HttpLoadTester.Services.xproj", "{1589B5E3-4F97-4DFC-9BFD-5F7D51601C93}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HttpLoadTester.Services", "HttpLoadTester.Services\HttpLoadTester.Services.xproj", "{1589B5E3-4F97-4DFC-9BFD-5F7D51601C93}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TestRunner", "src\TestRunner\TestRunner.xproj", "{DE24B395-5C69-45A9-A6AF-E552A669A0EA}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TestRunner", "TestRunner\TestRunner.xproj", "{DE24B395-5C69-45A9-A6AF-E552A669A0EA}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HttpLoadTester.Entites", "src\HttpLoadTester.Entites\HttpLoadTester.Entites.xproj", "{B736DFE6-5F6E-4A43-B743-A7A6EC9294DA}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "HttpLoadTester.Entites", "HttpLoadTester.Entites\HttpLoadTester.Entites.xproj", "{B736DFE6-5F6E-4A43-B743-A7A6EC9294DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

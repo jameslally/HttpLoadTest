@@ -43,35 +43,39 @@ $(function () {
     dashHub.client.displayFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
+            for (var reportId = 0; reportId < json.length; reportId++) {
+                var report = json[reportId]
+                var reportName = report.Name;
 
-            for (var i = 0; i < json.Rows.length; i++) {
-                var obj = json.Rows[i];
+                for (var i = 0; i < report.Rows.length; i++) {
+                    var obj = report.Rows[i];
 
-                var li = statusTable.find("#org-" + obj.Status);
+                    var li = statusTable.find("#org-" + obj.Status);
 
-                var data = {
-                    Status: obj.Status,
-                    Count: obj.Count,
-                    AverageDuration: obj.AverageDuration
-                };
+                    var data = {
+                        Status: obj.Status,
+                        Count: obj.Count,
+                        AverageDuration: obj.AverageDuration
+                    };
 
-                if (li.length === 0) {
-                    li = $(template(data));
-                    li.appendTo(statusTable);
+                    if (li.length === 0) {
+                        li = $(template(data));
+                        li.appendTo(statusTable);
 
-                    SetDataOnRow(li, data);
+                        SetDataOnRow(li, data);
+                    }
+
+                    if (li.data('count') !== data.Count) {
+
+                        li.html($(template(data)).html());
+
+                        SetDataOnRow(li, data);
+                    }
                 }
 
-                if (li.data('count') !== data.Count) {
-
-                    li.html($(template(data)).html());
-
-                    SetDataOnRow(li, data);
-                }
+                var last = report.ProcessedInLastMinute;
+                charty.updateChart(last)
             }
-
-            var last = json.ProcessedInLastMinute;
-            charty.updateChart(last)
         }
         //tick();
     };
