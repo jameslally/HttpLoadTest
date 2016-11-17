@@ -3,9 +3,8 @@ using HttpLoadTester.Entites.Test;
 
 namespace HttpLoadTester.Services
 {
-    public interface ITest
-    {
-        bool ResponsibleFor(string name);
+    public interface ITest : ITestDescriptors
+    {        
         Task Run(TestResult result);
     }
 }

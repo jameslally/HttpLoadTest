@@ -23,7 +23,7 @@ namespace HttpLoadTester.SignalR
 
         public void StartService(string testName)
         {
-            var test = _tests.FirstOrDefault(t => t.ResponsibleFor(testName));
+            var test = _tests.FirstOrDefault(t => t.Name.Equals(testName, StringComparison.OrdinalIgnoreCase));
             if (test != null)
             {
                 if (!_runner.ContainsKey(testName))

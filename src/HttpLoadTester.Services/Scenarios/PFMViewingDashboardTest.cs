@@ -20,7 +20,7 @@ namespace HttpLoadTester.Services.Scenarios
                                ,"http://192.168.1.12:816/api/Grid"
                                ,"http://192.168.1.12:816/api/GridColumn?gridCategory=INPATIENT"
                                ,"http://192.168.1.12:816/api/Ping" };
-
+        public string Name { get { return "PFMViewingDashboard"; } }
 
         public bool ResponsibleFor(string name)
         {

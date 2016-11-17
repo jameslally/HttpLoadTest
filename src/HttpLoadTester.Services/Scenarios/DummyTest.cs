@@ -9,12 +9,15 @@ namespace HttpLoadTester.Services.Scenarios
 {
     public class DummyTest : ITest
     {
+
         public DummyTest()
         {
             _random = new Random(5000);
 
         }
         private readonly Random _random;
+        public string Name { get { return "Dummy"; } }
+
         public bool ResponsibleFor(string name)
         {
             return "Dummy".Equals(name, StringComparison.OrdinalIgnoreCase);
