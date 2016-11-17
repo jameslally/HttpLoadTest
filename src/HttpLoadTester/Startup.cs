@@ -51,6 +51,7 @@ namespace HttpLoadTester
 
             services.AddTransient<ITest, DummyTest>();
             services.AddTransient<ITest, PFMViewingDashboardTest>();
+            services.AddTransient<ITest, PFMUpdatingPatient>();
 
             services.AddTransient<ServiceRunner>();
         }
