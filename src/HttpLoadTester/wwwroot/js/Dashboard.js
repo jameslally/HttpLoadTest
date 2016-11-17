@@ -21,13 +21,11 @@ $(function () {
         li.data('count', data.Count);
     }
 
-    $("#usrBtnStartView").click(function () {
-        $(this).find('i').collapse('show');
-        dashHub.server.sendStartToHub('Dummy');
+    $(".sendStartToHub").click(function () {
+        dashHub.server.sendStartToHub($(this).data('testname'));
     });
-    $("#usrBtnStopView").click(function () {
-        $(this).find('i').collapse('show');
-        dashHub.server.sendStopToHub('Dummy');
+    $(".sendStopToHub").click(function () {
+        dashHub.server.sendStopToHub($(this).data('testname'));
     });
 
     dashHub.client.displayFromHub = function (value) {
