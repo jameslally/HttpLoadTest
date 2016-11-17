@@ -50,8 +50,8 @@ namespace HttpLoadTester
             services.AddSingleton<ServiceActions>();
 
             services.AddTransient<ITest, DummyTest>();
-            services.AddTransient<ITest, PFMViewingDashboardTest>();
-            services.AddTransient<ITest, PFMUpdatingPatient>();
+            services.AddTransient<ITest, PFMViewingDashboard>();
+            services.AddTransient<ITest, PFMAddNotes>();
 
             services.AddTransient<ServiceRunner>();
         }
