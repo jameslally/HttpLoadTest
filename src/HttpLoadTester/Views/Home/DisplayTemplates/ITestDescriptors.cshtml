@@ -1,6 +1,6 @@
 ﻿@model HttpLoadTester.Services.ITestDescriptors
 
-<div class="panel-heading">Simulating Users Viewing PFM Dashboard </div>
+<div class="panel-heading">@Model.DisplayText</div>
 <div id ="@string.Format("testContainer{0}",Model.Name)" data-testname="@Model.Name" class="panel-body testContainer">
 
 
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <canvas id="chartContainer"></canvas>
+                <canvas class="chartContainer"></canvas>
 
             </div>
         </div>

@@ -17,7 +17,7 @@ namespace HttpLoadTester.SignalR
         private readonly IHubContext _hubContext;
         private readonly ServiceActions _statusService;
         private readonly string _sourceUrl;
-        private int _totalCount = 0;
+        private Dictionary<string, int> _totalCount;
         
 
         public ServiceRunner(IConnectionManager connectionManager, IConfiguration configuration, ServiceActions statusService)
@@ -25,7 +25,7 @@ namespace HttpLoadTester.SignalR
             _hubContext = connectionManager.GetHubContext<DashboardHub>();
             _statusService = statusService;
             _sourceUrl = configuration["HttpSourceLocation"];
-            
+            _totalCount = new Dictionary<string, int>();
         }
 
         public bool Active { get; set; }
@@ -53,6 +53,8 @@ namespace HttpLoadTester.SignalR
                 int totalCount = 0;
                 var results = new TestReport();
                 results.Name = key;
+                if (!_totalCount.ContainsKey(key))
+                    _totalCount.Add(key, 0);
 
                 var rows = new List<TestReportRow>();
                 foreach (var group in _statusService.Results[key].GroupBy(g => g.Status))
@@ -66,8 +68,8 @@ namespace HttpLoadTester.SignalR
                         totalCount += count;
                 }
                 results.Rows = rows;
-                results.ProcessedInLastMinute = totalCount - _totalCount;
-                _totalCount = totalCount;
+                results.ProcessedInLastMinute = totalCount - _totalCount[key];
+                _totalCount[key] = totalCount;
 
                 resultsList.Add(results);
             }

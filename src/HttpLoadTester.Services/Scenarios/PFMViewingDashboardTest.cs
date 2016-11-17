@@ -22,10 +22,7 @@ namespace HttpLoadTester.Services.Scenarios
                                ,"http://192.168.1.12:816/api/Ping" };
         public string Name { get { return "PFMViewingDashboard"; } }
 
-        public bool ResponsibleFor(string name)
-        {
-            return "PFMViewingDashboard".Equals(name, StringComparison.OrdinalIgnoreCase);
-        }      
+        public string DisplayText { get { return "Simulating Users Viewing PFM Dashboard"; } }
 
         public async override Task RunInnerTest(TestResult result, HttpClient client)
         {

@@ -18,6 +18,8 @@ namespace HttpLoadTester.Services.Scenarios
         private readonly Random _random;
         public string Name { get { return "Dummy"; } }
 
+        public string DisplayText { get { return "Dummy Tests"; } }
+
         public async Task Run(TestResult result)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();

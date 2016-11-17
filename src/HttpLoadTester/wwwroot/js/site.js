@@ -10945,16 +10945,20 @@ $(function () {
     var dashHub = $.connection.dashboardHub,
         messages = $("#messages"),
         statusList = $("#statusList"),
-        //statusTable = $("#statusTable tbody"),
         start,
         templateSource = $("#some-template").html(),
         template = Handlebars.compile(templateSource),
         testContainer = {};
 
+    $.connection.hub.logging = true;
+    HandlebarsIntl.registerWith(Handlebars);
+
     $(".testContainer").each(function () {
         var testName = $(this).data('testname');
+        var chartContainer = $(this).find(".chartContainer");
+
         testContainer[testName] = {};
-        testContainer[testName].charty = createCharty("chartContainer", "Request Per Second", "Request Sequence", "Requests");
+        testContainer[testName].charty = createCharty(chartContainer, "Request Per Second", "Request Sequence", "Requests");
         testContainer[testName].statusTable = $(this).find("tbody");
 
         $(this).find(".sendStartToHub").click(function () { dashHub.server.sendStartToHub(testName); });
@@ -10963,9 +10967,6 @@ $(function () {
     
 
 
-    $.connection.hub.logging = true;
-
-    HandlebarsIntl.registerWith(Handlebars);
 
     function SetDataOnRow(li , data) 
     {
@@ -10974,7 +10975,6 @@ $(function () {
     }
 
   
-
     dashHub.client.displayFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
@@ -11011,10 +11011,8 @@ $(function () {
 
                 var last = report.ProcessedInLastMinute;
                 testContainer[testName].charty.updateChart(last)
-                //charty.updateChart(last)
             }
         }
-        //tick();
     };
        
     $.connection.hub.stateChanged(function (change) {
