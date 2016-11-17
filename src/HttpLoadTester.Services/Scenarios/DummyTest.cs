@@ -18,11 +18,6 @@ namespace HttpLoadTester.Services.Scenarios
         private readonly Random _random;
         public string Name { get { return "Dummy"; } }
 
-        public bool ResponsibleFor(string name)
-        {
-            return "Dummy".Equals(name, StringComparison.OrdinalIgnoreCase);
-        }
-
         public async Task Run(TestResult result)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();

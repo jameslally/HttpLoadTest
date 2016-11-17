@@ -1,14 +1,14 @@
 ﻿@model HttpLoadTester.Services.ITestDescriptors
 
 <div class="panel-heading">Simulating Users Viewing PFM Dashboard </div>
-<div id ="@string.Format("testContainer{0}",Model.Name)" class="panel-body">
+<div id ="@string.Format("testContainer{0}",Model.Name)" data-testname="@Model.Name" class="panel-body testContainer">
 
 
     <div class="container">
         <div class="row">
             <div class="btn-group btn-group-lg" role="group" aria-label="Simulates PFM user views">
-                <button id="usrBtnStartView" type="button" data-testname="@Model.Name" class="btn btn-default sendStartToHub">Start</button>
-                <button id="usrBtnStopView" type="button" data-testname="@Model.Name" class="btn btn-default sendStopToHub">Stop</button>
+                <button type="button" class="btn btn-default sendStartToHub">Start</button>
+                <button type="button" class="btn btn-default sendStopToHub">Stop</button>
             </div>
         </div>
         <div class="row">
@@ -33,4 +33,3 @@
         </div>
     </div>
 </div>
-

@@ -4,12 +4,23 @@ $(function () {
     var dashHub = $.connection.dashboardHub,
         messages = $("#messages"),
         statusList = $("#statusList"),
-        statusTable = $("#statusTable tbody"),
+        //statusTable = $("#statusTable tbody"),
         start,
         templateSource = $("#some-template").html(),
-        template = Handlebars.compile(templateSource);
+        template = Handlebars.compile(templateSource),
+        testContainer = {};
 
-    var charty = createCharty("chartContainer", "Request Per Second", "Request Sequence", "Requests");
+    $(".testContainer").each(function () {
+        var testName = $(this).data('testname');
+        testContainer[testName] = {};
+        testContainer[testName].charty = createCharty("chartContainer", "Request Per Second", "Request Sequence", "Requests");
+        testContainer[testName].statusTable = $(this).find("tbody");
+
+        $(this).find(".sendStartToHub").click(function () { dashHub.server.sendStartToHub(testName); });
+        $(this).find(".sendStopToHub").click(function () { dashHub.server.sendStopToHub(testName); });
+    })
+    
+
 
     $.connection.hub.logging = true;
 
@@ -21,19 +32,15 @@ $(function () {
         li.data('count', data.Count);
     }
 
-    $(".sendStartToHub").click(function () {
-        dashHub.server.sendStartToHub($(this).data('testname'));
-    });
-    $(".sendStopToHub").click(function () {
-        dashHub.server.sendStopToHub($(this).data('testname'));
-    });
+  
 
     dashHub.client.displayFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
             for (var reportId = 0; reportId < json.length; reportId++) {
                 var report = json[reportId]
-                var reportName = report.Name;
+                var testName = report.Name;
+                var statusTable = testContainer[testName].statusTable;
 
                 for (var i = 0; i < report.Rows.length; i++) {
                     var obj = report.Rows[i];
@@ -62,7 +69,8 @@ $(function () {
                 }
 
                 var last = report.ProcessedInLastMinute;
-                charty.updateChart(last)
+                testContainer[testName].charty.updateChart(last)
+                //charty.updateChart(last)
             }
         }
         //tick();
