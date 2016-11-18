@@ -1,50 +1,97 @@
-﻿/// <binding AfterBuild='onbuild' Clean='clean' ProjectOpened='default' />
 'use strict';
 
 var gulp = require('gulp'),
+    tsc = require('gulp-typescript'),
+    tslint = require('gulp-tslint'),
+    sourcemaps = require('gulp-sourcemaps'),
+    del = require('del'),
+    project = require('./project.json'),
+    tsProject = tsc.createProject('tsconfig.json'),
     rimraf = require('gulp-rimraf'),
     concat = require('gulp-concat'),
     cssmin = require('gulp-cssmin'),
     uglify = require('gulp-uglify'),
-    merge = require('merge-stream'),
-    project = require('./project.json'),
     rename = require('gulp-rename'),
-    sourcemaps = require('gulp-sourcemaps'),
     bower = require('gulp-bower');
 
-var webroot = './' + project.webroot + '/';
+var webroot = './' + project.webroot + '/', 
+    bowerDirectory = "./bower_components/";
 
 var paths = {
     js: [
-        webroot + 'js/json2.js',
-        webroot + 'js/jquery.cookie.js',
-        webroot + 'js/signalr.samples.js',
-        webroot + 'js/DashboardCanvasJS.js',
-        webroot + 'js/Dashboard.js'
+        project.tsOutputPath + 'json2.js',
+        project.tsOutputPath + 'jquery.cookie.js',
+        project.tsOutputPath + 'signalr.samples.js',
+        project.tsOutputPath + 'DashboardCanvasJS.js',
+        project.tsOutputPath + 'Dashboard.js'
     ],
     jsRoot: webroot + 'js',
-    jsWatch: [webroot + 'js/**/*.js', '!' + webroot + 'js/site.js', '!' + webroot + 'js/**/*.min.js'],
-    jsMin: webroot + 'js/**/*.min.js',
-    jsBuild: webroot + 'js/site.js',
-    jsBuildMin: webroot + 'js/site.min.js',
     jsLib:
     [
-        webroot + 'lib/signalr/jquery.signalR.js',
-        webroot + 'lib/handlebars/handlebars.js',
-        webroot + 'lib/handlebars-helpers/src/helpers.js',
-        webroot + 'lib/handlebars-helper-intl/dist/handlebars-intl.js',
-        webroot + 'lib/chart.js/dist/Chart.js',
+        bowerDirectory + 'signalr/jquery.signalR.js',
+        bowerDirectory + 'handlebars/handlebars.js',
+        bowerDirectory + 'handlebars-helpers/src/helpers.js',
+        bowerDirectory + 'handlebars-helper-intl/dist/handlebars-intl.js',
+        bowerDirectory + 'chart.js/dist/Chart.js',
     ],
     jsLibNoBundle:
     [
-        webroot + 'lib/jquery/dist/jquery.js',
-        webroot + 'lib/bootstrap/dist/js/bootstrap.js'
-    ],
-    css: webroot + 'css/*.css',
-    cssBuild: webroot + 'css/site.css',
-    cssBuildMin: webroot + 'css/site.min.css',
-    bower:webroot + 'lib'
+        bowerDirectory + 'jquery/dist/jquery.js',
+        bowerDirectory + 'bootstrap/dist/js/bootstrap.js'
+    ]
+    
 };
+
+/*********************************
+ * typescript startTag
+**********************************/
+
+gulp.task('ts-lint', function () {
+    return gulp.src(project.tsSource)
+          .pipe(tslint({
+          formatter: "verbose"
+      }))
+      .pipe(tslint.report());       
+});
+
+/**
+ * Compile TypeScript and include references to library and app .d.ts files.
+ */
+gulp.task('compile-ts', function () {
+    var sourceTsFiles = [project.tsSource,                //path to typescript files
+                         project.tsLlbraryDefinitions]; //reference to library .d.ts files
+                        
+
+    var tsResult = gulp.src(sourceTsFiles)
+                       .pipe(sourcemaps.init())
+                       .pipe(tsProject());
+
+
+
+        tsResult.dts.pipe(gulp.dest(project.tsOutputPath));
+        return tsResult.js
+                        .pipe(sourcemaps.write('.'))
+                        .pipe(gulp.dest(project.tsOutputPath));
+});
+
+/**
+ * Remove all generated JavaScript files from TypeScript compilation.
+ */
+gulp.task('clean-ts', function (cb) {
+  var typeScriptGenFiles = [
+                              project.tsOutputPath +'**/*.js',    // path to all JS files auto gen'd by editor
+                              project.tsOutputPath +'**/*.js.map', // path to all sourcemap files auto gen'd by editor
+                              '!' + project.tsOutputPath + 'lib'
+                           ];
+
+  // delete the files
+  del(typeScriptGenFiles, cb);
+});
+
+
+/*********************************
+ * typescript endtag
+**********************************/
 
 gulp.task('clean:js', function () {
     //gulp.src([paths.jsBuildMin], { read: false })
@@ -79,27 +126,20 @@ gulp.task('copy:js', function () {
     ;
 });
 
-gulp.task('min:styles', ['clean:css'], function () {
-    gulp.src(paths.cssBuild)
-        .pipe(gulp.dest('.'))
-        .pipe(cssmin())
-        .pipe(rename(paths.cssBuildMin))
-        .pipe(gulp.dest('.'))
-        .pipe(sourcemaps.write('../../sourcemaps'))
-    ;
-});
-
-gulp.task('watch', [], function () {
-    gulp.watch(paths.jsWatch, ['min:js']);
-    gulp.watch([paths.css], ['min:styles']);
-});
-
-gulp.task('min', ['min:js', 'min:styles'], function () { });
-
-gulp.task('onbuild', ['bower' , 'min', 'copy:js'], function () { });
-
-gulp.task('default', ['onbuild', 'watch'], function () { });
-
+/*******************************************
+ * Tasks
+ */
 gulp.task('bower', function() {
     return bower()
-        .pipe(gulp.dest(paths.bower))});
+        .pipe(gulp.dest(bowerDirectory))});
+
+
+gulp.task('watch', function() {
+    gulp.watch([project.tsSource], ['ts-lint', 'compile-ts']);
+});
+
+gulp.task('default', ['ts-lint', 'compile-ts', 'copy:js', 'min:js']);
+
+/****************************
+ * 
+ ***************************/

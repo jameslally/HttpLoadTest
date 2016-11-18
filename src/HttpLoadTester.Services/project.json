@@ -5,7 +5,9 @@
   },
 
   "dependencies": {
-    "HttpLoadTester.Entites": "1.0.0-*",
+      "HttpLoadTester.Entites":{
+          "target":"project"
+      },
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"

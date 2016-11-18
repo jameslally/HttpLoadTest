@@ -1,9 +1,5 @@
-﻿using HttpLoadTester.DTOs;
-using HttpLoadTester.Services;
-using System;
+﻿using HttpLoadTester.Services;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HttpLoadTester.ViewModels
 {

@@ -1,26 +1,16 @@
 {
     "version": "0.1.0",
-    "command": "gulp",
+    "command": "dotnet",
     "isShellCommand": true,
-    "args": [
-        "--no-color"
-    ],
+    "args": [],
     "tasks": [
-		{
-			"taskName": "onbuild",
-			"isBuildCommand": true,
-			"showOutput": "always"
-		}
-        //,
-		//{
-		//	"taskName": "sass",
-		//	"isBuildCommand": true,
-		//	"showOutput": "always"
-		//},
-		//{
-		//	"taskName": "watch",
-		//	"isBuildCommand": true,
-		//	"showOutput": "always"
-		//}
-	]
+        {
+            "taskName": "build",
+            "args": [
+                "${workspaceRoot}/project.json"
+            ],
+            "isBuildCommand": true,
+            "problemMatcher": "$msCompile"
+        }
+    ]
 }
