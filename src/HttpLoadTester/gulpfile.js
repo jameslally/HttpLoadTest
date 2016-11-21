@@ -38,6 +38,12 @@ var paths = {
     [
         bowerDirectory + 'jquery/dist/jquery.js',
         bowerDirectory + 'bootstrap/dist/js/bootstrap.js'
+    ],
+    cssRoot: webroot + 'css',
+    cssLibNoBundle:
+    [
+        bowerDirectory + 'bootstrap/dist/css/bootstrap.css',
+        bowerDirectory + 'bootstrap/dist/css/bootstrap.min.css'
     ]
     
 };
@@ -126,6 +132,12 @@ gulp.task('copy:js', function () {
     ;
 });
 
+gulp.task('copy:css', function () {
+    gulp.src(paths.cssLibNoBundle)
+        .pipe(gulp.dest(paths.cssRoot + '/lib'))
+    ;
+});
+
 /*******************************************
  * Tasks
  */
@@ -138,7 +150,7 @@ gulp.task('watch', function() {
     gulp.watch([project.tsSource], ['ts-lint', 'compile-ts']);
 });
 
-gulp.task('default', ['ts-lint', 'compile-ts', 'copy:js', 'min:js']);
+gulp.task('default', ['ts-lint', 'compile-ts', 'copy:js', 'min:js' , 'copy:css']);
 
 /****************************
  * 

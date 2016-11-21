@@ -14,17 +14,20 @@ namespace HttpLoadTester.Services.Scenarios
 
     public abstract class BaseQITest 
     {
-        public BaseQITest()
+        private readonly string _baseUrl;
+
+        public BaseQITest(string baseUrl)
         {
             _userCookies = new Dictionary<string, CookieContainer>();
+            _baseUrl = baseUrl;
         }
 
         private Dictionary<string, CookieContainer> _userCookies;        
         private readonly string[] initalCookiePages = new[] {
-                                "http://192.168.1.12:816/Config/UserConfig.aspx"
-                               ,"http://192.168.1.12:816/api/UserConfig"
-                               ,"http://192.168.1.12:816/api/Settings?option=splash"
-                               ,"http://192.168.1.12:816/api/User"
+                                "Config/UserConfig.aspx"
+                               ,"api/UserConfig"
+                               ,"api/Settings?option=splash"
+                               ,"api/User"
                                 };
 
         public abstract Task RunInnerTest(TestResult result , HttpClient client);
@@ -88,7 +91,7 @@ namespace HttpLoadTester.Services.Scenarios
                         {
                             foreach (var page in initalCookiePages)
                             {
-                                var response = httpClient.GetAsync(page).Result;
+                                var response = httpClient.GetAsync(_baseUrl + page).Result;
                                 response.EnsureSuccessStatusCode();
                             }
                             _userCookies.Add(userName, cookies);

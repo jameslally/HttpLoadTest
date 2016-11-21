@@ -14,12 +14,18 @@ namespace HttpLoadTester.Services.Scenarios
 
     public class PFMViewingDashboard : BaseQITest, ITest
     {
+        
+        private readonly string _baseUrl;
+        public PFMViewingDashboard(string baseUrl = "http://192.168.1.12:816/" ) : base(baseUrl)
+        {
+            _baseUrl = baseUrl;
+        }
         private readonly string[] testPages = new[] {
-                               "http://192.168.1.12:816/api/SummaryCount"
-                               ,"http://192.168.1.12:816/api/MOTD"
-                               ,"http://192.168.1.12:816/api/Grid"
-                               ,"http://192.168.1.12:816/api/GridColumn?gridCategory=INPATIENT"
-                               ,"http://192.168.1.12:816/api/Ping" };
+                               "api/SummaryCount"
+                               ,"api/MOTD"
+                               ,"api/Grid"
+                               ,"api/GridColumn?gridCategory=INPATIENT"
+                               ,"api/Ping" };
         public string Name { get { return "PFMViewingDashboard"; } }
 
         public string DisplayText { get { return "Simulating Users Viewing PFM Dashboard"; } }
@@ -28,7 +34,7 @@ namespace HttpLoadTester.Services.Scenarios
         {
             foreach (var page in testPages)
             {
-                var response = await client.GetAsync(page);
+                var response = await client.GetAsync(_baseUrl + page);
                 response.EnsureSuccessStatusCode();
                 var s = await response.Content.ReadAsStringAsync();
             }
