@@ -1,25 +1,31 @@
 {
   "version": "1.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": false,
+    "emitEntryPoint": true,
     "preserveCompilationContext": true,
      "debugType": "portable"
   },
 
   "dependencies": {
-      "HttpLoadTester.Entites":{
-          "target":"project"
-      },
+    "HttpLoadTester.Entites":{
+            "target":"project"
+        },
+    "HttpLoadTester.Services":{
+            "target":"project"
+        },
     "Microsoft.NETCore.App": {
       "type": "platform",
-      "version": "1.0.0"
-    },
-    "System.Net.Http": "4.1.0"
+      "version": "1.0.1"
+    }
   },
 
   "frameworks": {
     "netcoreapp1.0": {
       "imports": "dnxcore50"
     }
+  },
+
+  "tooling": {
+    "defaultNamespace": "ConsoleTestRunner"
   }
 }

@@ -8,9 +8,10 @@
     "tasks": [
         {
             "taskName": "build",
-            "args": [ "${workspaceRoot}/src/HttpLoadTester/project.json" 
-                    , "${workspaceRoot}/src/HttpLoadTester.Entites/project.json" 
-                    , "${workspaceRoot}/src/HttpLoadTester.Services/project.json" ],
+            "args": [ "${workspaceRoot}/src/HttpLoadTester.Entites/project.json" 
+                    , "${workspaceRoot}/src/HttpLoadTester.Services/project.json"
+                    , "${workspaceRoot}/src/HttpLoadTester/project.json"
+                    , "${workspaceRoot}/src/ConsoleTestRunner/project.json"  ],
             "isBuildCommand": true,
             "showOutput": "silent",
             "problemMatcher": "$msCompile"

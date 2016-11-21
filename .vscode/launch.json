@@ -34,6 +34,18 @@
             }
         },
         {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceRoot}/src/ConsoleTestRunner/bin/Debug/netcoreapp1.0/ConsoleTestRunner.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}/src/ConsoleTestRunner",
+            "externalConsole": true,
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach",
