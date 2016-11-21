@@ -5,18 +5,21 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace HttpLoadTester.Services.Scenarios
 {
 
     public abstract class BaseQITest 
     {
-        private readonly string _baseUrl;
+        protected readonly string _baseUrl;
+        private readonly Random _random;
 
-        public BaseQITest(string baseUrl)
+        public BaseQITest(TestConfiguration config)
         {
             _userCookies = new Dictionary<string, CookieContainer>();
-            _baseUrl = baseUrl;
+            _baseUrl = config.BaseUrl;
+            _random = new Random();
         }
 
         private Dictionary<string, CookieContainer> _userCookies;        
@@ -31,6 +34,8 @@ namespace HttpLoadTester.Services.Scenarios
 
         public async Task Run(TestResult result)
         {
+            //Thread.Sleep(_random.Next(2000,8000));
+
             result.Status = ResultStatusType.Running;
             var sw = System.Diagnostics.Stopwatch.StartNew();
             try

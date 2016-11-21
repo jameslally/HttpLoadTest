@@ -8,11 +8,10 @@ namespace HttpLoadTester.Services.Scenarios
 
     public class PFMViewingDashboard : BaseQITest, ITest
     {
-        
-        private readonly string _baseUrl;
-        public PFMViewingDashboard(string baseUrl = "http://192.168.1.12:816/" ) : base(baseUrl)
+
+        public PFMViewingDashboard(TestConfiguration config) : base(config)
         {
-            _baseUrl = baseUrl;
+
         }
         private readonly string[] testPages = new[] {
                                "api/SummaryCount"

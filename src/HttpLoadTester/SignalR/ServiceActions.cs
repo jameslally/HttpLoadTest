@@ -27,7 +27,7 @@ namespace HttpLoadTester.SignalR
             {
                 if (!_runner.ContainsKey(testName))
                 {
-                    var runner = new ScenariosRunner(test, 10, 5000);
+                    var runner = new ScenariosRunner(test, 10);
                     this.Results.Add(testName, new ConcurrentBag<TestResult>());
                     runner.ExecuteTestRun(this.Results[testName]);
                     _runner.Add(testName, runner);

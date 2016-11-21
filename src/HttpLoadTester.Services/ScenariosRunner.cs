@@ -10,13 +10,11 @@ namespace HttpLoadTester.Services
     {
         private readonly ITest _test;
         private readonly int _parallelTests;
-        private readonly int _numberOfTests;
         private List<Task> _workerThreads;
-        public ScenariosRunner(ITest test , int parallelTests , int numberOfTests)
+        public ScenariosRunner(ITest test , int parallelTests)
         {
             _test = test;
             _parallelTests = parallelTests;
-            _numberOfTests = numberOfTests;
             _workerThreads = new List<Task>();
             
         }

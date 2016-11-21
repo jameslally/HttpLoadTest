@@ -11,6 +11,7 @@ namespace HttpLoadTester
 {
     public class Startup
     {
+        
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -50,6 +51,12 @@ namespace HttpLoadTester
             services.AddTransient<ITest, PFMAddNotes>();
 
             services.AddTransient<ServiceRunner>();
+
+
+            var config = new TestConfiguration () 
+                    { BaseUrl = Configuration["BaseUrl"] };
+
+            services.AddSingleton<TestConfiguration>(config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +64,7 @@ namespace HttpLoadTester
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
 
             app.UseApplicationInsightsRequestTelemetry();
 
