@@ -3,7 +3,11 @@ using HttpLoadTester.Entites.Test;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
-using System.Threading;
+using Newtonsoft.Json;
+using System.Linq;
+using System;
+using System.Collections.Generic;
+using PFM.net.Model.JsonPatient;
 
 namespace HttpLoadTester.Services.Scenarios
 {
@@ -24,17 +28,45 @@ namespace HttpLoadTester.Services.Scenarios
             await GetTabs(result, client);
             await GetTabsControls(result, client);
             await ShowEpisodeImportButton(result, client);
-            await GetPatient(result, client);
-            await client.PostAsync($"{_baseUrl}UserInput/UserInputService.aspx/SavePatient", null);
+            var patient = await GetPatient(result, client);
+            await SavePatient(result, client, patient);
         }
 
-        private async Task GetPatient(TestResult result, HttpClient client)
+        private void updatePatient(JsonPatientWrapper patient)
+        {
+            var random = new Random();
+            var ctrlKeys = patient.d.Controls
+                                .Where(c => c.ControlType == "TextBox");
+
+            if (ctrlKeys.Count() > 0)
+            {
+                foreach (var key in ctrlKeys.OrderBy(o => random.Next(10000)).Take(5))
+                {
+                    key.IsValueChanged = true;
+                }
+
+            }
+
+        }
+        private async Task SavePatient(TestResult result, HttpClient client, JsonPatientWrapper patient)
+        {
+//public static JsonPatient SavePatient(JsonPatient patient, string saveType, string category, string homerUsername, string homerPassword, string hospital)
+            updatePatient(patient);
+            var changedJson = JsonConvert.SerializeObject(patient);
+            var requestContent = getContent("{patient : '" + changedJson + "', saveType:'' , category: '' ,hospital:''}");
+            var response = await client.PostAsync($"{_baseUrl}UserInput/UserInputService.aspx/SavePatient", requestContent);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+        }
+
+        private async Task<JsonPatientWrapper> GetPatient(TestResult result, HttpClient client)
         {
             var requestContent = getContent("{episodeId : '401', tableName:'INPATIENT'}");
 
             var response = await client.PostAsync($"{_baseUrl}UserInput/UserInputService.aspx/GetPatient", requestContent);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<JsonPatientWrapper>(content);
         }
 
         private async Task ShowEpisodeImportButton(TestResult result, HttpClient client)
