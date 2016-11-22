@@ -19,8 +19,8 @@ $(function () {
 
 
         testContainer[testName] = {};
-        testContainer[testName].charty = createCharty(chartContainer, "Request Per Second", "Request Sequence", "Requests");
-        testContainer[testName].durationCharty = createDurationCharty(chartDurationContainer, "Request Durations", "Time", "Duration");
+        testContainer[testName].charty = createCharty(chartContainer);
+        testContainer[testName].durationCharty = createDurationCharty(chartDurationContainer);
 
         testContainer[testName].statusTable = $(this).find("tbody");
 
@@ -43,6 +43,9 @@ $(function () {
                 var report = json[reportId]
                 var testName = report.Name;
                 var dataPoints = [];
+                var successData = [];
+                var failedData = [];
+
                 for (var i = 0; i < report.Items.length; i++) {
                     var obj = report.Items[i];
                     dataPoints.push({
@@ -50,8 +53,21 @@ $(function () {
                         y: obj.AverageDuration
                     });
 
+                    successData.push({
+                        x: obj.EventTime,
+                        y: obj.SuccessfulRequests
+                    });
+
+                    failedData.push({
+                        x: obj.EventTime,
+                        y: obj.FailedRequests
+                    });
                 };
-                testContainer[testName].durationCharty.updateChart(dataPoints)
+                testContainer[testName].durationCharty.updateChart(dataPoints);
+
+
+                //NumberOfRequests
+                testContainer[testName].charty.updateChart(successData,failedData);
             }
         }
 
@@ -92,7 +108,7 @@ $(function () {
                 }
 
                 var last = report.ProcessedInLastMinute;
-                testContainer[testName].charty.updateChart(last)
+
             }
         }
     };

@@ -26753,42 +26753,62 @@ function getQueryVariable(variable) {
 var activeTransport = getQueryVariable('transport') || 'auto';
 var isJsonp = getQueryVariable('jsonp') === 'true';
 
-function createCharty(containerSelector, title, xAxis, yAxis) {
+function createCharty(containerSelector) {
 
     var charty = {};
     charty.dataPoints = [];
-
+    charty.dataPointsFailed = [];
     charty.chart = new Chart(containerSelector, {
         type: 'line',
         data: {
             datasets: [{
-                label: title,
-                data: charty.dataPoints
+                label: "Successful",
+                data: charty.dataPoints,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)'
+            }
+            ,{
+                label: "Failed",
+                data: charty.dataPointsFailed,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255,99,132,1)'
             }]
         },
         options: {
             scales: {
                 xAxes: [{
-                    type: 'linear',
-                    position: 'bottom'
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            minute: 'hh:mm'
+                        }
+                    }
+                }],
+                yAxes: [{
+                    min: 0,
+                    stacked: true
                 }]
             }
         }
     });
-    charty.xVal = 0;
-    charty.dataLength = 50; // number of dataPoints visible at any point
 
-    charty.updateChart = function (yVal) {
+    charty.updateChart = function (successData,failedData) {
 
-        charty.dataPoints.push({
-            x: charty.xVal,
-            y: yVal
-        });
-        charty.xVal++;
+        charty.dataPoints.length = 0;
+        charty.dataPointsFailed.length = 0;
 
-        if (charty.dataPoints.length > charty.dataLength) {
-            charty.dataPoints.shift();
-        }
+
+        successData.forEach(function(element) {
+            charty.dataPoints.push({
+                x: moment(element.x,"HH:mm"),
+                y: element.y});
+        }, this);
+
+        failedData.forEach(function(element) {
+            charty.dataPointsFailed.push({
+                x: moment(element.x,"HH:mm"),
+                y: element.y});
+        }, this);
 
         charty.chart.update();
     };
@@ -26797,7 +26817,7 @@ function createCharty(containerSelector, title, xAxis, yAxis) {
     return charty;
 }
 
-function createDurationCharty(containerSelector, title, xAxis, yAxis) {
+function createDurationCharty(containerSelector) {
 
     var charty = {};
     charty.dataPoints = [];
@@ -26806,8 +26826,10 @@ function createDurationCharty(containerSelector, title, xAxis, yAxis) {
         type: 'line',
         data: {
             datasets: [{
-                label: title,
-                data: charty.dataPoints
+                label: "Avg Response Time (ms)",
+                data: charty.dataPoints,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)'
             }]
         },
         options: {
@@ -26863,8 +26885,8 @@ $(function () {
 
 
         testContainer[testName] = {};
-        testContainer[testName].charty = createCharty(chartContainer, "Request Per Second", "Request Sequence", "Requests");
-        testContainer[testName].durationCharty = createDurationCharty(chartDurationContainer, "Request Durations", "Time", "Duration");
+        testContainer[testName].charty = createCharty(chartContainer);
+        testContainer[testName].durationCharty = createDurationCharty(chartDurationContainer);
 
         testContainer[testName].statusTable = $(this).find("tbody");
 
@@ -26887,6 +26909,9 @@ $(function () {
                 var report = json[reportId]
                 var testName = report.Name;
                 var dataPoints = [];
+                var successData = [];
+                var failedData = [];
+
                 for (var i = 0; i < report.Items.length; i++) {
                     var obj = report.Items[i];
                     dataPoints.push({
@@ -26894,8 +26919,21 @@ $(function () {
                         y: obj.AverageDuration
                     });
 
+                    successData.push({
+                        x: obj.EventTime,
+                        y: obj.SuccessfulRequests
+                    });
+
+                    failedData.push({
+                        x: obj.EventTime,
+                        y: obj.FailedRequests
+                    });
                 };
-                testContainer[testName].durationCharty.updateChart(dataPoints)
+                testContainer[testName].durationCharty.updateChart(dataPoints);
+
+
+                //NumberOfRequests
+                testContainer[testName].charty.updateChart(successData,failedData);
             }
         }
 
@@ -26936,7 +26974,7 @@ $(function () {
                 }
 
                 var last = report.ProcessedInLastMinute;
-                testContainer[testName].charty.updateChart(last)
+
             }
         }
     };

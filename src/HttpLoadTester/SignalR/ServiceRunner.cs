@@ -38,7 +38,7 @@ namespace HttpLoadTester.SignalR
                 var json = GetStatusJson();
                 _hubContext.Clients.All.displayFromHub(json).Wait();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
             }
         }
 
@@ -50,7 +50,7 @@ namespace HttpLoadTester.SignalR
                 var json = GetDurationJson();
                 _hubContext.Clients.All.displayDurationReportFromHub(json).Wait();
 
-                Thread.Sleep(10000);
+                Thread.Sleep(60000);
             }
         }
 
@@ -62,16 +62,20 @@ namespace HttpLoadTester.SignalR
                 var results = new TestDurationReport();
                 results.Name = key;
 
-                var events = _statusService.Results[key].Where(r => r.Duration.HasValue && r.StartDate > DateTime.Now.AddHours(-1));
+                var events = _statusService.Results[key].Where(r => r.Duration.HasValue && r.StartDate > DateTime.Now.AddHours(-1)).ToList();;
 
                 var rows = new List<TestDurationReportItem>();
                 foreach (var group in events.GroupBy(g => g.StartDate.ToString("HH:mm")))
                 {
-                    var count = group.Count();
-                    var avg = group.Average(g => g.Duration.Value);
-                    var item = new TestDurationReportItem();
-                    item.AverageDuration = avg;
-                    item.EventTime = group.Key;
+                    
+                    var item = new TestDurationReportItem()
+                    {
+                        AverageDuration =  group.Average(g => g.Duration.Value),
+                        SuccessfulRequests = group.Where( g => g.Status == ResultStatusType.Success).Count(),
+                        FailedRequests = group.Where( g => g.Status == ResultStatusType.Failed).Count(),
+                        EventTime = group.Key
+                    };
+
                     rows.Add(item);
                     
                 }
@@ -80,14 +84,11 @@ namespace HttpLoadTester.SignalR
                 {
                     var minDate = events.Min(e => e.StartDate);
                     var paddedRows = new List<TestDurationReportItem>();
-                    for (int i = 60; i > rows.Count ; i--)
+                    for (int i = 60 - rows.Count; i >  0; i--)
                     {
                         paddedRows.Add(new TestDurationReportItem() { EventTime = minDate.AddMinutes(-1 - i).ToString("HH:mm") });
                     }
-                    foreach(var row in rows.OrderBy(r => r.EventTime))
-                    {
-                        paddedRows.Add(row);
-                    }
+                    paddedRows.AddRange(rows.OrderBy(r => r.EventTime));
                     
                     results.Items = paddedRows;
                 }
