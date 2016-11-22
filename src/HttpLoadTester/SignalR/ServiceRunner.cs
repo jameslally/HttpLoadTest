@@ -76,7 +76,21 @@ namespace HttpLoadTester.SignalR
                     
                 }
                 results.Items = rows;
-
+                if (rows.Count > 0 && rows.Count < 60)
+                {
+                    var minDate = events.Min(e => e.StartDate);
+                    var paddedRows = new List<TestDurationReportItem>();
+                    for (int i = 60; i > rows.Count ; i--)
+                    {
+                        paddedRows.Add(new TestDurationReportItem() { EventTime = minDate.AddMinutes(-1 - i).ToString("HH:mm") });
+                    }
+                    foreach(var row in rows.OrderBy(r => r.EventTime))
+                    {
+                        paddedRows.Add(row);
+                    }
+                    
+                    results.Items = paddedRows;
+                }
 
                 resultsList.Add(results);
             }
