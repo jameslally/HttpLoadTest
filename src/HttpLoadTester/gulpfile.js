@@ -33,6 +33,7 @@ var paths = {
         bowerDirectory + 'handlebars-helpers/src/helpers.js',
         bowerDirectory + 'handlebars-helper-intl/dist/handlebars-intl.js',
         bowerDirectory + 'chart.js/dist/Chart.js',
+        bowerDirectory + 'moment/moment.js',
     ],
     jsLibNoBundle:
     [

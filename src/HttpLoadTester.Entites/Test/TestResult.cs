@@ -17,7 +17,7 @@ namespace HttpLoadTester.Entites.Test
         }
         public ResultStatusType Status { get; set; }
         public Guid Id { get; }
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
         public long? Duration { get; set; }
     }
 

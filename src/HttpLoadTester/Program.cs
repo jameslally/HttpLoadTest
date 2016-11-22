@@ -7,7 +7,7 @@ namespace HttpLoadTester
 {
     public class Program
     {
-        private static Task _task;
+        private static Task[] _tasks;
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
@@ -18,7 +18,10 @@ namespace HttpLoadTester
                 .Build();
 
             var s = host.Services.GetService(typeof(ServiceRunner)) as ServiceRunner;
-            _task = Task.Run(() => s.DoWork());
+            _tasks = new [] {
+                    Task.Run(() => s.DoWork())
+                    ,Task.Run(() => s.DoDurationReports())
+                    };
 
             
             host.Run();

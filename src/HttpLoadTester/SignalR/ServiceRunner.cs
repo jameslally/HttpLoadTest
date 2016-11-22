@@ -42,7 +42,47 @@ namespace HttpLoadTester.SignalR
             }
         }
 
-   
+        public void DoDurationReports()
+        {
+            Active = true;
+            while (Active)
+            {
+                var json = GetDurationJson();
+                _hubContext.Clients.All.displayDurationReportFromHub(json).Wait();
+
+                Thread.Sleep(10000);
+            }
+        }
+
+        private string GetDurationJson()
+        {
+            var resultsList = new List<TestDurationReport>();
+            foreach (var key in _statusService.Results.Keys)
+            {
+                var results = new TestDurationReport();
+                results.Name = key;
+
+                var events = _statusService.Results[key].Where(r => r.Duration.HasValue && r.StartDate > DateTime.Now.AddHours(-1));
+
+                var rows = new List<TestDurationReportItem>();
+                foreach (var group in events.GroupBy(g => g.StartDate.ToString("HH:mm")))
+                {
+                    var count = group.Count();
+                    var avg = group.Average(g => g.Duration.Value);
+                    var item = new TestDurationReportItem();
+                    item.AverageDuration = avg;
+                    item.EventTime = group.Key;
+                    rows.Add(item);
+                    
+                }
+                results.Items = rows;
+
+
+                resultsList.Add(results);
+            }
+
+            return JsonConvert.SerializeObject(resultsList);
+        }
 
         private string GetStatusJson()
         {

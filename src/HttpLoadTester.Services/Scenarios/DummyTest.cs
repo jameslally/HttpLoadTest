@@ -22,7 +22,7 @@ namespace HttpLoadTester.Services.Scenarios
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             result.Status = ResultStatusType.Running;
-            result.StartDate = DateTime.UtcNow;
+            result.StartDate = DateTime.Now;
             Console.WriteLine($"test started {result.Id}");
             int random = _random.Next(500, 5000);
 

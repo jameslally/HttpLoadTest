@@ -15,25 +15,48 @@ $(function () {
     $(".testContainer").each(function () {
         var testName = $(this).data('testname');
         var chartContainer = $(this).find(".chartContainer");
+        var chartDurationContainer = $(this).find(".chartDurationContainer");
+
 
         testContainer[testName] = {};
         testContainer[testName].charty = createCharty(chartContainer, "Request Per Second", "Request Sequence", "Requests");
+        testContainer[testName].durationCharty = createDurationCharty(chartDurationContainer, "Request Durations", "Time", "Duration");
+
         testContainer[testName].statusTable = $(this).find("tbody");
 
         $(this).find(".sendStartToHub").click(function () { dashHub.server.sendStartToHub(testName); });
         $(this).find(".sendStopToHub").click(function () { dashHub.server.sendStopToHub(testName); });
     })
-    
 
 
 
-    function SetDataOnRow(li , data) 
-    {
+
+    function SetDataOnRow(li, data) {
         li.data('status', data.Status);
         li.data('count', data.Count);
     }
 
-  
+    dashHub.client.displayDurationReportFromHub = function (value) {
+        if (value) {
+            var json = eval("(" + value + ")");
+            for (var reportId = 0; reportId < json.length; reportId++) {
+                var report = json[reportId]
+                var testName = report.Name;
+                var dataPoints = [];
+                for (var i = 0; i < report.Items.length; i++) {
+                    var obj = report.Items[i];
+                    dataPoints.push({
+                        x: obj.EventTime,
+                        y: obj.AverageDuration
+                    });
+
+                };
+                testContainer[testName].durationCharty.updateChart(dataPoints)
+            }
+        }
+
+    };
+
     dashHub.client.displayFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
@@ -73,7 +96,7 @@ $(function () {
             }
         }
     };
-       
+
     $.connection.hub.stateChanged(function (change) {
         var oldState = null,
             newState = null;
@@ -91,13 +114,13 @@ $(function () {
         //            .appendTo(messages);
     });
 
-    $.connection.hub.reconnected(function() {
+    $.connection.hub.reconnected(function () {
         $('#hub-status').removeClass('alert-danger').addClass('alert-success').text('Reconnected');
     });
-    $.connection.hub.error(function(err) {
+    $.connection.hub.error(function (err) {
         $('#hub-status').removeClass('alert-success').addClass('alert-danger').text(err);
     });
-    $.connection.hub.disconnected(function() {
+    $.connection.hub.disconnected(function () {
         $('#hub-status').removeClass('alert-success').addClass('alert-warning').text('Disconnected');
     });
 
@@ -110,5 +133,5 @@ $(function () {
             });
     };
 
-    start(); 
+    start();
 });
