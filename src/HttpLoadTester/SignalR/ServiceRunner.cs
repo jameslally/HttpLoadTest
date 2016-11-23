@@ -29,7 +29,7 @@ namespace HttpLoadTester.SignalR
 
         public bool Active { get; set; }
 
-        public void DoWork()
+        public void DoQuickReports()
         {
             Active = true;
 
@@ -42,7 +42,7 @@ namespace HttpLoadTester.SignalR
             }
         }
 
-        public void DoDurationReports()
+        public void DoLongRunningReports()
         {
             Active = true;
             while (Active)
@@ -50,10 +50,33 @@ namespace HttpLoadTester.SignalR
                 var json = GetDurationJson();
                 _hubContext.Clients.All.displayDurationReportFromHub(json).Wait();
 
+                var exceptionJson = GetExceptionJson();
+                _hubContext.Clients.All.displayExceptionReportFromHub(exceptionJson).Wait();
                 Thread.Sleep(60000);
             }
         }
 
+        private string GetExceptionJson(){
+            var resultsList = new List<TestExceptionReportItem>();
+            foreach (var key in _statusService.Results.Keys)
+            {
+                var results = new TestDurationReport();
+                results.Name = key;
+                
+                var events = _statusService.Results[key].Where(s => s.Status == ResultStatusType.Failed)
+                                                        .OrderByDescending(s => s.StartDate)
+                                                        .Take(50);
+                var reportItems = events.Select(e => new TestExceptionReportItem() {TestName = key 
+                                                                                    , StartDate = e.StartDate 
+                                                                                    , ResponseCode = "0" 
+                                                                                    , Message = e.Exception.Message});
+                resultsList.AddRange(reportItems);
+            }
+
+            var report = new TestExceptionReport() ;
+            report.Exceptions = resultsList.OrderByDescending(s => s.StartDate).Take(50);
+            return JsonConvert.SerializeObject(report);
+        }
         private string GetDurationJson()
         {
             var resultsList = new List<TestDurationReport>();

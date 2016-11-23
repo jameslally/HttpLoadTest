@@ -1,16 +1,21 @@
-function populateErrorTable() {
-    var theData = {
-            exceptions: [
-                {testName: "view", time: "11:52", message: "broken", responseCode: "500" },
-                {testName: "update", time: "12:55", message: "big exceptions", responseCode: "401" }
-            ]
-        };
 
-    
+function populateErrorsTable() {
+    var errObj = {};
+    errObj.templateSource = $("#failedRequestsTemplate").html();
+    errObj.template = Handlebars.compile(errObj.templateSource);
+    errObj.container = $("#failedRequests");
+    errObj.table = errObj.container.find("tbody");
 
-    var templateSource = $("#failedRequestsTemplate").html(),
-        template = Handlebars.compile(templateSource);
+    errObj.populate = function populate(data) {
+       // var theData = {
+       //     exceptions: [
+       //         { testName: "view", time: "11:52", message: "broken", responseCode: "500" },
+       //         { testName: "update", time: "12:55", message: "big exceptions", responseCode: "401" }
+       //     ]
+       // };
 
-    var container = $("#failedRequests");
-    container.find("tbody").html(template(theData));
+        errObj.table.html(errObj.template(data));
+    };
+
+    return errObj;
 }

@@ -54,6 +54,7 @@ namespace HttpLoadTester.Services.Scenarios
             catch (Exception ex)
             {
                 Console.WriteLine($"test exception {result.Id} - {sw.ElapsedMilliseconds}ms - {ex.Message}");
+                result.Exception = ex;
                 result.Status = ResultStatusType.Failed;
             }
             finally

@@ -7,13 +7,12 @@ $(function () {
         start,
         templateSource = $("#some-template").html(),
         template = Handlebars.compile(templateSource),
-        testContainer = {};
+        testContainer = {},
+        errorTable = populateErrorsTable();
 
     $.connection.hub.logging = true;
     HandlebarsIntl.registerWith(Handlebars);
 
-
-    populateErrorTable();
     $(".testContainer").each(function () {
         var testName = $(this).data('testname');
         var chartContainer = $(this).find(".chartContainer");
@@ -38,6 +37,20 @@ $(function () {
         li.data('count', data.Count);
     }
 
+    dashHub.client.displayExceptionReportFromHub = function (value) {
+        if (value) {
+
+            var dataList = [];
+            var json = eval("(" + value + ")");
+            for (var reportId = 0; reportId < json.Exceptions.length; reportId++) {
+                var report = json.Exceptions[reportId]
+                dataList.push({ testName: report.TestName, time: report.Time , message: report.Message, responseCode: report.ResponseCode });
+            }
+            var data = { exceptions: dataList };
+            errorTable.populate(data);
+        }
+        //alert (value);
+    }
     dashHub.client.displayDurationReportFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
@@ -69,7 +82,7 @@ $(function () {
 
 
                 //NumberOfRequests
-                testContainer[testName].charty.updateChart(successData,failedData);
+                testContainer[testName].charty.updateChart(successData, failedData);
             }
         }
 

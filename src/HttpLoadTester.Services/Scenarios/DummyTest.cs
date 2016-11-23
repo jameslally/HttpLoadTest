@@ -31,6 +31,10 @@ namespace HttpLoadTester.Services.Scenarios
                         Thread.Sleep(random);
                         result.Duration = sw.ElapsedMilliseconds;
                         result.Status = random % 10 == 0 ? ResultStatusType.Failed : ResultStatusType.Success;
+                        if (result.Status == ResultStatusType.Failed)
+                        {
+                            result.Exception = new InvalidOperationException("Dummy Error Message...");
+                        }
                 });
 
             Console.WriteLine($"test done {result.Id}");

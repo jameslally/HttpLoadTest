@@ -19,6 +19,8 @@ namespace HttpLoadTester.Entites.Test
         public Guid Id { get; }
         public DateTime StartDate { get; set; }
         public long? Duration { get; set; }
+
+        public Exception Exception {get;set;}
     }
 
 }

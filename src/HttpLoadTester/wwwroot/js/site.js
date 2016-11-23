@@ -26896,21 +26896,26 @@ function createDurationCharty(containerSelector) {
 
     return charty;
 }
-function populateErrorTable() {
-    var theData = {
-            exceptions: [
-                {testName: "view", time: "11:52", message: "broken", responseCode: "500" },
-                {testName: "update", time: "12:55", message: "big exceptions", responseCode: "401" }
-            ]
-        };
 
-    
+function populateErrorsTable() {
+    var errObj = {};
+    errObj.templateSource = $("#failedRequestsTemplate").html();
+    errObj.template = Handlebars.compile(errObj.templateSource);
+    errObj.container = $("#failedRequests");
+    errObj.table = errObj.container.find("tbody");
 
-    var templateSource = $("#failedRequestsTemplate").html(),
-        template = Handlebars.compile(templateSource);
+    errObj.populate = function populate(data) {
+       // var theData = {
+       //     exceptions: [
+       //         { testName: "view", time: "11:52", message: "broken", responseCode: "500" },
+       //         { testName: "update", time: "12:55", message: "big exceptions", responseCode: "401" }
+       //     ]
+       // };
 
-    var container = $("#failedRequests");
-    container.find("tbody").html(template(theData));
+        errObj.table.html(errObj.template(data));
+    };
+
+    return errObj;
 }
 
 $(function () {
@@ -26921,13 +26926,12 @@ $(function () {
         start,
         templateSource = $("#some-template").html(),
         template = Handlebars.compile(templateSource),
-        testContainer = {};
+        testContainer = {},
+        errorTable = populateErrorsTable();
 
     $.connection.hub.logging = true;
     HandlebarsIntl.registerWith(Handlebars);
 
-
-    populateErrorTable();
     $(".testContainer").each(function () {
         var testName = $(this).data('testname');
         var chartContainer = $(this).find(".chartContainer");
@@ -26952,6 +26956,20 @@ $(function () {
         li.data('count', data.Count);
     }
 
+    dashHub.client.displayExceptionReportFromHub = function (value) {
+        if (value) {
+
+            var dataList = [];
+            var json = eval("(" + value + ")");
+            for (var reportId = 0; reportId < json.Exceptions.length; reportId++) {
+                var report = json.Exceptions[reportId]
+                dataList.push({ testName: report.TestName, time: report.Time , message: report.Message, responseCode: report.ResponseCode });
+            }
+            var data = { exceptions: dataList };
+            errorTable.populate(data);
+        }
+        //alert (value);
+    }
     dashHub.client.displayDurationReportFromHub = function (value) {
         if (value) {
             var json = eval("(" + value + ")");
@@ -26983,7 +27001,7 @@ $(function () {
 
 
                 //NumberOfRequests
-                testContainer[testName].charty.updateChart(successData,failedData);
+                testContainer[testName].charty.updateChart(successData, failedData);
             }
         }
 
