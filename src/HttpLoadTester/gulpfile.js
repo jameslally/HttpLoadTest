@@ -141,6 +141,12 @@ gulp.task('copy:css', function () {
         .pipe(gulp.dest(paths.cssRoot));
 });
 
+gulp.task('min:css', function () {
+    gulp.src(project.cssSource)
+        .pipe(cssmin())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(paths.cssRoot));
+});
 /*******************************************
  * Tasks
  */
@@ -153,7 +159,7 @@ gulp.task('watch', function() {
     gulp.watch([project.tsSource], ['ts-lint', 'compile-ts']);
 });
 
-gulp.task('default', ['ts-lint', 'compile-ts', 'copy:js', 'min:js' , 'copy:css']);
+gulp.task('default', ['ts-lint', 'compile-ts', 'copy:js', 'min:js' , 'copy:css' , 'min:css']);
 
 /****************************
  * 
