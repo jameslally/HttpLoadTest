@@ -9,7 +9,7 @@ namespace ConsoleTestRunner
     {
         public static void Main(string[] args)
         {
-            var test = new HttpLoadTester.Services.Scenarios.PFMAddNotes(new TestConfiguration() { BaseUrl = "http://localhost:56999/" });
+            var test = new HttpLoadTester.Services.Scenarios.PFMAddNotes(new TestConfiguration() { BaseUrl = "http://192.168.1.12:816/"});// "http://localhost:56999/" });
             var testRunner = new HttpLoadTester.Services.ScenariosRunner(test , 1);
 
             var results = new ConcurrentBag<TestResult> ();

@@ -135,8 +135,10 @@ gulp.task('copy:js', function () {
 
 gulp.task('copy:css', function () {
     gulp.src(paths.cssLibNoBundle)
-        .pipe(gulp.dest(paths.cssRoot + '/lib'))
-    ;
+        .pipe(gulp.dest(paths.cssRoot + '/lib'));
+
+    gulp.src(project.cssSource)
+        .pipe(gulp.dest(paths.cssRoot));
 });
 
 /*******************************************

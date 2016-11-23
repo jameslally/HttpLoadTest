@@ -17,7 +17,7 @@ namespace HttpLoadTester.Controllers
         public IActionResult Index()
         {
             var model = new ViewModels.HomeIndexViewModel();
-            model.Tests = _tests.Where(t => t.Name == "Dummy");
+            model.Tests = _tests.Where(t => t.Name != "Dummy");
             return View(model);
         }
         

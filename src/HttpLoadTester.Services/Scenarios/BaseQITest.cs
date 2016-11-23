@@ -37,6 +37,7 @@ namespace HttpLoadTester.Services.Scenarios
             //Thread.Sleep(_random.Next(2000,8000));
 
             result.Status = ResultStatusType.Running;
+            result.StartDate = DateTime.Now;
             var sw = System.Diagnostics.Stopwatch.StartNew();
             try
             {
@@ -50,9 +51,9 @@ namespace HttpLoadTester.Services.Scenarios
                 Console.WriteLine($"test done {result.Id} - {sw.ElapsedMilliseconds}ms");
                 result.Status = ResultStatusType.Success;
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine($"test exception {result.Id} - {sw.ElapsedMilliseconds}ms");
+                Console.WriteLine($"test exception {result.Id} - {sw.ElapsedMilliseconds}ms - {ex.Message}");
                 result.Status = ResultStatusType.Failed;
             }
             finally

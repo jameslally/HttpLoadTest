@@ -36,7 +36,7 @@ namespace HttpLoadTester.Services.Scenarios
         {
             var random = new Random();
             var ctrlKeys = patient.d.Controls
-                                .Where(c => c.ControlType == "TextBox");
+                                .Where(c => c.ControlType == "TextBox" && !c.IsIntegrated);
 
             if (ctrlKeys.Count() > 0)
             {
@@ -50,10 +50,9 @@ namespace HttpLoadTester.Services.Scenarios
         }
         private async Task SavePatient(TestResult result, HttpClient client, JsonPatientWrapper patient)
         {
-//public static JsonPatient SavePatient(JsonPatient patient, string saveType, string category, string homerUsername, string homerPassword, string hospital)
             updatePatient(patient);
-            var changedJson = JsonConvert.SerializeObject(patient);
-            var requestContent = getContent("{patient : '" + changedJson + "', saveType:'' , category: '' ,hospital:''}");
+            var changedJson = JsonConvert.SerializeObject(patient.d).TrimEnd('}').TrimStart('{');
+            var requestContent = getContent("{'patient': {'__type': 'PFM.net.Model.JsonPatient'," + changedJson + "}, saveType:'FULL' , category: 'INPATIENT' ,hospital:'eric' , homerUsername:'eric' , homerPassword:'ericPwd' , hospital:'hopsitalA'}");
             var response = await client.PostAsync($"{_baseUrl}UserInput/UserInputService.aspx/SavePatient", requestContent);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();

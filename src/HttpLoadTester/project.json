@@ -79,6 +79,7 @@
   "webroot": "wwwroot",
   "tsOutputPath": "./Scripts/",
   "tsSource": "./Scripts/**/*.ts",
+  "cssSource": "./Styles/**/*.css",
   "tsLlbraryDefinitions": "./Typings/**/*.ts",
   "tooling": {
     "defaultNamespace": "LoadTester"
