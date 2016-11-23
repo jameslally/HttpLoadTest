@@ -12,6 +12,8 @@ $(function () {
     $.connection.hub.logging = true;
     HandlebarsIntl.registerWith(Handlebars);
 
+
+    populateErrorTable();
     $(".testContainer").each(function () {
         var testName = $(this).data('testname');
         var chartContainer = $(this).find(".chartContainer");

@@ -1,0 +1,27 @@
+<div id="failedRequests">
+    <div class="table-responsive">
+        <table id="statusTable" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Request Type</th>
+                    <th>Time</th>
+                    <th>Response Code</th>
+                    <th>Error Message</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+<script id="failedRequestsTemplate" type="text/x-handlebars-template">
+        {{#exceptions}}
+            <tr>
+                <td>{{testName}}</td>
+                <td>{{time}}</td>
+                <td>{{responseCode}}</td>
+                <td>{{message}}</td>
+            </tr>
+        {{/exceptions}}
+</script>

@@ -23,6 +23,7 @@ var paths = {
         project.tsOutputPath + 'jquery.cookie.js',
         project.tsOutputPath + 'signalr.samples.js',
         project.tsOutputPath + 'DashboardCanvasJS.js',
+        project.tsOutputPath + 'ErrorTable.js',
         project.tsOutputPath + 'Dashboard.js'
     ],
     jsRoot: webroot + 'js',
