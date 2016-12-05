@@ -65,6 +65,7 @@
     "include": [
       "wwwroot",
       "**/*.cshtml",
+      "Views",
       "appsettings.json",
       "web.config"
     ]

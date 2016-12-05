@@ -10,5 +10,7 @@ namespace HttpLoadTester.DTOs
         public string Time { get { return StartDate.ToString("HH:mm"); } }
         public string ResponseCode {get;set;}
         public string Message {get;set;}
+
+        public long Duration { get; set; }
     }
 }

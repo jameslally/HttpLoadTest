@@ -44,7 +44,7 @@ $(function () {
             var json = eval("(" + value + ")");
             for (var reportId = 0; reportId < json.Exceptions.length; reportId++) {
                 var report = json.Exceptions[reportId]
-                dataList.push({ testName: report.TestName, time: report.Time , message: report.Message, responseCode: report.ResponseCode });
+                dataList.push({ testName: report.TestName, time: report.Time, message: report.Message, responseCode: report.ResponseCode, duration: report.Duration });
             }
             var data = { exceptions: dataList };
             errorTable.populate(data);
