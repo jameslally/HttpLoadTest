@@ -51,9 +51,16 @@ namespace HttpLoadTester.Services.Scenarios
                 Console.WriteLine($"test done {result.Id} - {sw.ElapsedMilliseconds}ms");
                 result.Status = ResultStatusType.Success;
             }
+            catch (SimpleHttpResponseException ex)
+            {
+                Console.WriteLine(ex.Message);
+                result.Exception = ex;
+                result.Status = ResultStatusType.Failed;
+                result.StatusCode = (int)ex.StatusCode;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"test exception {result.Id} - {sw.ElapsedMilliseconds}ms - {ex.Message}");
+                Console.WriteLine(ex.Message);
                 result.Exception = ex;
                 result.Status = ResultStatusType.Failed;
             }
@@ -73,7 +80,7 @@ namespace HttpLoadTester.Services.Scenarios
                 UseDefaultCredentials = true
             };
             
-            var httpClient = new HttpClient(httpClientHandler, true);
+            var httpClient = new HttpClient(new CustomHttpClientHandler(httpClientHandler), true);
             httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Persistent - Auth", "true");
             httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Expires", "-1");
 

@@ -68,7 +68,7 @@ namespace HttpLoadTester.SignalR
                                                         .Take(50);
                 var reportItems = events.Select(e => new TestExceptionReportItem() {TestName = key 
                                                                                     , StartDate = e.StartDate 
-                                                                                    , ResponseCode = "0" 
+                                                                                    , ResponseCode = e.StatusCode == 0 ? "" : e.StatusCode.ToString()                                                                                     
                                                                                     , Message = e.Exception.Message
                                                                                     , Duration = e.Duration.Value});
                 resultsList.AddRange(reportItems);

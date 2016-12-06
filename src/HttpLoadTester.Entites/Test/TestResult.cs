@@ -21,6 +21,8 @@ namespace HttpLoadTester.Entites.Test
         public long? Duration { get; set; }
 
         public Exception Exception {get;set;}
+
+        public int StatusCode { get; set; }
     }
 
 }
