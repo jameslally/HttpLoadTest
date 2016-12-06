@@ -12,10 +12,12 @@ namespace HttpLoadTester.SignalR
         public Dictionary<string, ConcurrentBag<TestResult>> Results { get; }
         private readonly Dictionary<string, ScenariosRunner> _runner;
         private readonly IEnumerable<ITest> _tests;
+        private readonly TestConfiguration _config;
 
-        public ServiceActions (IEnumerable<ITest> tests)
+        public ServiceActions (IEnumerable<ITest> tests , TestConfiguration config)
         {
             _tests = tests;
+            _config = config;
             this.Results = new Dictionary<string, ConcurrentBag<TestResult>>(StringComparer.OrdinalIgnoreCase);
             this._runner = new Dictionary<string, ScenariosRunner>(StringComparer.OrdinalIgnoreCase);
         }
@@ -27,7 +29,7 @@ namespace HttpLoadTester.SignalR
             {
                 if (!_runner.ContainsKey(testName))
                 {
-                    var runner = new ScenariosRunner(test, 10);
+                    var runner = new ScenariosRunner(test, _config.ConcurrentUsersPerTest);
                     this.Results.Add(testName, new ConcurrentBag<TestResult>());
                     runner.ExecuteTestRun(this.Results[testName]);
                     _runner.Add(testName, runner);

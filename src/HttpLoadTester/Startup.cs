@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using HttpLoadTester.SignalR;
 using HttpLoadTester.Services;
 using HttpLoadTester.Services.Scenarios;
+using System.Linq;
 
 namespace HttpLoadTester
 {
@@ -52,9 +53,12 @@ namespace HttpLoadTester
 
             services.AddTransient<ServiceRunner>();
 
-
             var config = new TestConfiguration () 
-                    { BaseUrl = Configuration["BaseUrl"] };
+                    { BaseUrl = Configuration["BaseUrl"]
+                      , ConcurrentUsersPerTest = int.Parse(Configuration["ConcurrentUsersPerTest"])
+                      , UserWaitSeconds = int.Parse(Configuration["UserWaitSeconds"]) 
+                      , EpisodeIDs = Configuration["EpisodeIDs"].Split(',').Select(s => int.Parse(s)).ToArray()
+            };
 
             services.AddSingleton<TestConfiguration>(config);
         }

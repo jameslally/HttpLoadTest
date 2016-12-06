@@ -60,7 +60,8 @@ namespace HttpLoadTester.Services.Scenarios
 
         private async Task<JsonPatientWrapper> GetPatient(TestResult result, HttpClient client)
         {
-            var requestContent = getContent("{episodeId : '401', tableName:'INPATIENT'}");
+            var nextEpisodeId = getNextEpisodeId();
+            var requestContent = getContent("{episodeId : '" + nextEpisodeId + "', tableName:'INPATIENT'}");
 
             var response = await client.PostAsync($"{_baseUrl}UserInput/UserInputService.aspx/GetPatient", requestContent);
             response.EnsureSuccessStatusCode();
@@ -68,6 +69,12 @@ namespace HttpLoadTester.Services.Scenarios
             return JsonConvert.DeserializeObject<JsonPatientWrapper>(content);
         }
 
+        private int getNextEpisodeId()
+        {
+            var r = new Random();
+            var pos = _random.Next(0, _config.EpisodeIDs.Count() - 1);
+            return _config.EpisodeIDs[pos];
+        }
         private async Task ShowEpisodeImportButton(TestResult result, HttpClient client)
         {
             var requestContent = getContent("{episodeId : '401', tableName:'INPATIENT' , isMobile : 'false'}");

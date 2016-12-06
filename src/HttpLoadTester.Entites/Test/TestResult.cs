@@ -4,7 +4,7 @@ namespace HttpLoadTester.Entites.Test
 {
     public enum ResultStatusType
     {
-        ToDo=0
+        Sleeping=0
         ,Running=1
         ,Success=2
         ,Failed=3

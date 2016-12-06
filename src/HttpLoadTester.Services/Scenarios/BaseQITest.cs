@@ -10,19 +10,21 @@ using System.Threading;
 namespace HttpLoadTester.Services.Scenarios
 {
 
-    public abstract class BaseQITest 
+    public abstract class BaseQITest
     {
         protected readonly string _baseUrl;
-        private readonly Random _random;
+        protected readonly TestConfiguration _config;
+        protected readonly Random _random;
 
         public BaseQITest(TestConfiguration config)
         {
+            _config = config;
             _userCookies = new Dictionary<string, CookieContainer>();
             _baseUrl = config.BaseUrl;
             _random = new Random();
         }
 
-        private Dictionary<string, CookieContainer> _userCookies;        
+        private Dictionary<string, CookieContainer> _userCookies;
         private readonly string[] initalCookiePages = new[] {
                                 "Config/UserConfig.aspx"
                                ,"api/UserConfig"
@@ -30,11 +32,12 @@ namespace HttpLoadTester.Services.Scenarios
                                ,"api/User"
                                 };
 
-        public abstract Task RunInnerTest(TestResult result , HttpClient client);
+        public abstract Task RunInnerTest(TestResult result, HttpClient client);
 
         public async Task Run(TestResult result)
         {
-            //Thread.Sleep(_random.Next(2000,8000));
+            if (_config.UserWaitSeconds > 0)
+                Thread.Sleep(_random.Next(1000, 1000 * _config.UserWaitSeconds));
 
             result.Status = ResultStatusType.Running;
             result.StartDate = DateTime.Now;
@@ -79,7 +82,7 @@ namespace HttpLoadTester.Services.Scenarios
                 CookieContainer = cookies,
                 UseDefaultCredentials = true
             };
-            
+
             var httpClient = new HttpClient(new CustomHttpClientHandler(httpClientHandler), true);
             httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Persistent - Auth", "true");
             httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Expires", "-1");
