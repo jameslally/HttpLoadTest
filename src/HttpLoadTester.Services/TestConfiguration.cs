@@ -9,7 +9,7 @@ namespace HttpLoadTester.Services
         public int UserWaitSeconds { get; set; }
         public int ConcurrentUsersPerTest { get; set; }
 
-
+        public string CookieUserName { get; set; }
 
     }
 }

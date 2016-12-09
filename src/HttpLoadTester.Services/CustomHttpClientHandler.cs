@@ -26,6 +26,7 @@ namespace HttpLoadTester.Services
                 }
                 else
                 {
+                    Console.WriteLine(response.Content);
                     throw new SimpleHttpResponseException(response.StatusCode, $"Exception calling url '{request.RequestUri}'");
                 }
             }

@@ -61,6 +61,7 @@ namespace HttpLoadTester
                       , ConcurrentUsersPerTest = int.Parse(Configuration["ConcurrentUsersPerTest"])
                       , UserWaitSeconds = int.Parse(Configuration["UserWaitSeconds"]) 
                       , EpisodeIDs = Configuration["EpisodeIDs"].Split(',').Select(s => int.Parse(s)).ToArray()
+                      , CookieUserName = Configuration["CookieUserName"]
             };
 
             services.AddSingleton<TestConfiguration>(config);

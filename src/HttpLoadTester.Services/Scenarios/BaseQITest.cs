@@ -44,7 +44,7 @@ namespace HttpLoadTester.Services.Scenarios
             var sw = System.Diagnostics.Stopwatch.StartNew();
             try
             {
-                var cookies = GetUserCookies("hiq\\jamesl");
+                var cookies = GetUserCookies(_config.CookieUserName);
 
                 Console.WriteLine($"test started {result.Id}");
                 using (var httpClient = createClient(cookies))
@@ -61,12 +61,19 @@ namespace HttpLoadTester.Services.Scenarios
                 result.Status = ResultStatusType.Failed;
                 result.StatusCode = (int)ex.StatusCode;
             }
+            catch (AggregateException ex)
+            {
+                foreach (var inner in ex.InnerExceptions)
+                    Console.WriteLine(inner.Message);
+                result.Exception = ex;
+                result.Status = ResultStatusType.Failed;
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 result.Exception = ex;
                 result.Status = ResultStatusType.Failed;
-            }
+            }            
             finally
             {
                 result.Duration = sw.ElapsedMilliseconds;
