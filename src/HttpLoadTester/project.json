@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "HttpLoadTester.Entites":{
-            "target":"project"
-        },
-    "HttpLoadTester.Services":{
-            "target":"project"
-        },
+    "HttpLoadTester.Entites": {
+      "target": "project"
+    },
+    "HttpLoadTester.Services": {
+      "target": "project"
+    },
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
       "type": "platform"
@@ -30,7 +30,8 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Microsoft.AspNetCore.SignalR.Server": "0.2.0-preview2-*",
-    "Microsoft.AspNetCore.WebSockets.Server": "0.1.0"
+    "Microsoft.AspNetCore.WebSockets.Server": "0.1.0",
+    "Microsoft.Extensions.DependencyModel": "1.1.0"
   },
 
   "tools": {

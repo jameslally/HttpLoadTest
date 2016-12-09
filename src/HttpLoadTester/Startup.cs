@@ -7,6 +7,10 @@ using HttpLoadTester.SignalR;
 using HttpLoadTester.Services;
 using HttpLoadTester.Services.Scenarios;
 using System.Linq;
+using Microsoft.Extensions.DependencyModel;
+using System.Collections.Generic;
+using System.Reflection;
+using System;
 
 namespace HttpLoadTester
 {
@@ -47,10 +51,8 @@ namespace HttpLoadTester
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<ServiceActions>();
 
-            services.AddTransient<ITest, DummyTest>();
-            services.AddTransient<ITest, PFMViewingDashboard>();
-            services.AddTransient<ITest, PFMAddNotes>();
-            services.AddTransient<ITest, PFMPings>();
+            
+            AddDependencyInjectionForTypes(new[] { typeof(ITest) }, services);
 
             services.AddTransient<ServiceRunner>();
 
@@ -62,6 +64,41 @@ namespace HttpLoadTester
             };
 
             services.AddSingleton<TestConfiguration>(config);
+        }
+
+        private void AddDependencyInjectionForTypes (IEnumerable<Type> types, IServiceCollection services)
+        {
+            var assemblies = GetReferencingAssemblies("HttpLoadTester");
+
+            foreach (var type in types)
+            {
+                foreach (var test in assemblies.SelectMany(s => s.GetTypes())
+                    .Where(p => type.IsAssignableFrom(p) && p != type))
+                {
+                    var name = test.Name;
+                    services.AddTransient(typeof(ITest), test);
+                }
+            }
+        }
+        private static IEnumerable<Assembly> GetReferencingAssemblies(string assemblyName)
+        {
+            var assemblies = new List<Assembly>();
+            var dependencies = DependencyContext.Default.RuntimeLibraries;
+            foreach (var library in dependencies)
+            {
+                if (IsCandidateLibrary(library, assemblyName))
+                {
+                    var assembly = Assembly.Load(new AssemblyName(library.Name));
+                    assemblies.Add(assembly);
+                }
+            }
+            return assemblies;
+        }
+
+        private static bool IsCandidateLibrary(RuntimeLibrary library, string assemblyName)
+        {
+            return library.Name == (assemblyName)
+                || library.Dependencies.Any(d => d.Name.StartsWith(assemblyName));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
