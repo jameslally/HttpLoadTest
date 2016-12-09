@@ -145,6 +145,16 @@ namespace HttpLoadTester.SignalR
                     if (group.Key == ResultStatusType.Failed || group.Key == ResultStatusType.Success)
                         totalCount += count;
                 }
+
+                foreach (var resultType in Enum.GetValues(typeof(ResultStatusType)))
+                {
+                    if (!rows.Any(r => r.Status == resultType.ToString()))
+                    {
+                        rows.Add(new TestReportRow() { AverageDuration = 0, Status = resultType.ToString(), Count = 0 });
+                    }
+                }
+
+
                 results.Rows = rows;
                 results.ProcessedInLastMinute = totalCount - _totalCount[key];
                 _totalCount[key] = totalCount;

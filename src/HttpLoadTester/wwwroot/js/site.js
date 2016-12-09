@@ -26952,8 +26952,13 @@ $(function () {
 
 
     function SetDataOnRow(li, data) {
-        li.data('status', data.Status);
-        li.data('count', data.Count);
+        if (data.AverageDuration === 0 && data.Count === 0) {
+            $(li).remove();
+        }
+        else {
+            li.data('status', data.Status);
+            li.data('count', data.Count);
+        }
     }
 
     dashHub.client.displayExceptionReportFromHub = function (value) {
